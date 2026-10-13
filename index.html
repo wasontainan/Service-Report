@@ -3,112 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>華勝科技 - 服務報告書</title>
-    <!-- 引入 Tailwind CSS -->
+    <title>華勝科技股份有限公司 - 服務報告書系統</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; }
+        .canvas-box { touch-action: none; background: #fafafa; }
+    </style>
 </head>
-<body class="bg-gray-50 p-4">
-    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-6">
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">服務報告書填寫</h2>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-8 px-4">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
         
-        <form id="reportForm" class="space-y-4">
-            <!-- 客戶名稱 -->
+        <!-- Header 標題區 -->
+        <div class="bg-slate-900 text-white p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <label class="block text-gray-700 font-medium">客戶名稱</label>
-                <input type="text" id="customerName" required class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                <h1 class="text-xl font-bold tracking-wider">WASON 華勝科技股份有限公司</h1>
+                <p class="text-xs text-slate-400 mt-1">服務報告書系統 - 現場數位化填寫介面</p>
+            </div>
+            <div class="text-right text-xs text-slate-300 space-y-1">
+                <div>電話: +886-3-390-6300</div>
+                <div>桃園市大溪區介壽路328號</div>
+            </div>
+        </div>
+
+        <form id="serviceForm" class="p-6 md:p-8 space-y-8">
+            
+            <!-- 區塊一：基本資料 -->
+            <div class="space-y-4">
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 一、 基本資料與客戶資訊
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">日期</label>
+                        <input type="date" id="date" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">報告編號</label>
+                        <input type="text" id="reportNo" value="261008" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">客戶名稱</label>
+                        <input type="text" id="customerName" placeholder="例如：光陽" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">電話 / 分機</label>
+                        <input type="text" id="phone" placeholder="07-382-2526 #718" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">客戶聯絡人</label>
+                        <input type="text" id="contactPerson" placeholder="葉柏鈞 #718" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">報修單號</label>
+                        <input type="text" id="repairNo" placeholder="E101-2026..." class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-700">住址</label>
+                        <input type="text" id="address" placeholder="高雄市三民區灣興街61號" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">機台編號 / 機型</label>
+                        <input type="text" id="machineNo" placeholder="251947-1 G-380 AB" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
             </div>
 
-            <!-- 報修單號 -->
-            <div>
-                <label class="block text-gray-700 font-medium">報修單號</label>
-                <input type="text" id="reportNo" required class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            <!-- 區塊二：服務性質與勾選選項 -->
+            <div class="space-y-4">
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 二、 服務性質與相關判定
+                </h2>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">服務性質 (可複選)</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="裝/試機" class="rounded text-blue-600"> <span class="text-sm">裝/試機</span></label>
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="修護" class="rounded text-blue-600"> <span class="text-sm">修護</span></label>
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="移機" class="rounded text-blue-600"> <span class="text-sm">移機</span></label>
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="教育訓練" class="rounded text-blue-600"> <span class="text-sm">教育訓練</span></label>
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="廠驗" class="rounded text-blue-600"> <span class="text-sm">廠驗</span></label>
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="打樣" class="rounded text-blue-600"> <span class="text-sm">打樣</span></label>
+                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="其它" class="rounded text-blue-600"> <span class="text-sm">其它</span></label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">服務費用</label>
+                        <select id="serviceFee" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                            <option value="無(保固期間)">無 (保固期間)</option>
+                            <option value="有">有</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">設備變更</label>
+                        <select id="equipChange" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                            <option value="否">否</option>
+                            <option value="是">是 (需開立工程變更單)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">回廠物件</label>
+                        <select id="returnItem" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                            <option value="否">否</option>
+                            <option value="是">是</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <!-- 工作內容 -->
-            <div>
-                <label class="block text-gray-700 font-medium">工作內容說明</label>
-                <textarea id="workContent" rows="3" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+            <!-- 區塊三：工作內容與處理對策 -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 工作內容原因分析與處理對策
+                    </h2>
+                    <button type="button" onclick="addWorkItem()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg transition">+ 新增項目</button>
+                </div>
+
+                <div id="workItemsContainer" class="space-y-3">
+                    <!-- 動態加入項目 -->
+                </div>
             </div>
 
-            <!-- 現場拍照 -->
-            <div>
-                <label class="block text-gray-700 font-medium">現場照片上傳</label>
-                <input type="file" id="photoInput" accept="image/*" capture="environment" class="w-full mt-1 p-2 border rounded-lg">
+            <!-- 區塊四：工時與時間紀錄 -->
+            <div class="space-y-4">
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 現場工時紀錄
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">入廠時間</label>
+                        <input type="datetime-local" id="inTime" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">出廠時間</label>
+                        <input type="datetime-local" id="outTime" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                    </div>
+                </div>
             </div>
 
-            <!-- 簽名畫布 -->
-            <div>
-                <label class="block text-gray-700 font-medium mb-1">客戶簽名</label>
-                <canvas id="sigCanvas" width="350" height="150" class="border border-gray-300 rounded-lg w-full bg-gray-50 cursor-crosshair"></canvas>
-                <button type="button" id="clearSig" class="mt-1 text-sm text-red-600 hover:underline">清除簽名</button>
+            <!-- 區塊五：電子簽名 -->
+            <div class="space-y-6 pt-2">
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 五、 確認與簽名
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">客戶確認簽名</label>
+                        <div class="border border-slate-300 rounded-lg overflow-hidden canvas-box">
+                            <canvas id="clientCanvas" width="360" height="160" class="w-full cursor-crosshair"></canvas>
+                        </div>
+                        <button type="button" onclick="clearCanvas('clientCanvas')" class="mt-1 text-xs text-red-600 hover:underline">清除客戶簽名</button>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">服務人員簽名</label>
+                        <div class="border border-slate-300 rounded-lg overflow-hidden canvas-box">
+                            <canvas id="staffCanvas" width="360" height="160" class="w-full cursor-crosshair"></canvas>
+                        </div>
+                        <button type="button" onclick="clearCanvas('staffCanvas')" class="mt-1 text-xs text-red-600 hover:underline">清除服務人員簽名</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">服務人員姓名/信箱</label>
+                    <input type="text" id="staffName" value="Jay Huang" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                </div>
             </div>
 
-            <!-- 提交按鈕 -->
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition">
-                送出報告並同步至試算表
-            </button>
+            <!-- 送出按鈕 -->
+            <div class="pt-4">
+                <button type="submit" id="submitBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl transition shadow-md">
+                    確認無誤，送出報告並同步至 Google 試算表
+                </button>
+            </div>
+
         </form>
     </div>
 
     <script>
-        // 簡單的簽名畫布邏輯
-        const canvas = document.getElementById('sigCanvas');
-        const ctx = canvas.getContext('2d');
-        let painting = false;
+        // 設定預設日期
+        document.getElementById('date').valueAsDate = new Date();
 
-        canvas.addEventListener('mousedown', startPosition);
-        canvas.addEventListener('mouseup', endPosition);
-        canvas.addEventListener('mousemove', draw);
-        
-        // 支援觸控螢幕
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPosition(e.touches[0]); });
-        canvas.addEventListener('touchend', (e) => { e.preventDefault(); endPosition(); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+        // 動態工作項目新增
+        function addWorkItem(desc = '', result = 'OK') {
+            const container = document.getElementById('workItemsContainer');
+            const index = container.children.length + 1;
+            const div = document.createElement('div');
+            div.className = "flex flex-col md:flex-row gap-2 items-start md:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 work-item-row";
+            div.innerHTML = `
+                <span class="text-xs font-bold text-slate-500 w-8">#${index}</span>
+                <input type="text" placeholder="工作內容說明與處理對策..." value="${desc}" class="work-desc flex-1 p-2 bg-white border border-slate-300 rounded text-sm w-full">
+                <select class="work-result p-2 bg-white border border-slate-300 rounded text-sm">
+                    <option value="OK" ${result==='OK'?'selected':''}>OK</option>
+                    <option value="待處理" ${result==='待處理'?'selected':''}>待處理</option>
+                </select>
+                <input type="file" accept="image/*" capture="environment" class="work-photo text-xs text-slate-500 w-full md:w-auto">
+                <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 text-xs px-2 py-1">刪除</button>
+            `;
+            container.appendChild(div);
+        }
+        // 預設給一個空白行
+        addWorkItem('膠槍保養、更換 A pump, 調整壓差錶');
 
-        function startPosition(e) { painting = true; draw(e); }
-        function endPosition() { painting = false; ctx.beginPath(); }
-        function draw(e) {
-            if (!painting) return;
-            const rect = canvas.getBoundingClientRect();
-            ctx.lineWidth = 3;
+        // 簽名畫布通用邏輯
+        function setupCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            let painting = false;
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            canvas.addEventListener('mousedown', (e) => { painting = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); });
+            canvas.addEventListener('mouseup', () => { painting = false; });
+            canvas.addEventListener('mousemove', (e) => { if (!painting) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); painting = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); });
+            canvas.addEventListener('touchend', (e) => { e.preventDefault(); painting = false; });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!painting) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+
+            ctx.lineWidth = 2.5;
             ctx.lineCap = 'round';
-            ctx.strokeStyle = '#000';
-            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.strokeStyle = '#0f172a';
         }
 
-        document.getElementById('clearSig').addEventListener('click', () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        });
+        setupCanvas('clientCanvas');
+        setupCanvas('staffCanvas');
 
-        // 表單送出處理
-        document.getElementById('reportForm').addEventListener('submit', async function(e) {
+        function clearCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 表單送出
+        document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const formData = {
-                customerName: document.getElementById('customerName').value,
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = "資料上傳中，請稍候...";
+
+            // 收集勾選的服務性質
+            const serviceTypes = [];
+            document.querySelectorAll('input[name="serviceType"]:checked').forEach(cb => serviceTypes.push(cb.value));
+
+            // 收集工作明細
+            const workItems = [];
+            document.querySelectorAll('.work-item-row').forEach(row => {
+                workItems.push({
+                    content: row.querySelector('.work-desc').value,
+                    result: row.querySelector('.work-result').value
+                });
+            });
+
+            const clientCanvas = document.getElementById('clientCanvas');
+            const staffCanvas = document.getElementById('staffCanvas');
+
+            const payload = {
                 reportNo: document.getElementById('reportNo').value,
-                workContent: document.getElementById('workContent').value,
-                signature: canvas.toDataURL(), // 轉成 Base64 傳輸
-                photo: "" // 實際應用可將圖片轉 Base64 或上傳至 Imgur/Drive
+                date: document.getElementById('date').value,
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                address: document.getElementById('address').value,
+                repairNo: document.getElementById('repairNo').value,
+                machineNo: document.getElementById('machineNo').value,
+                serviceType: serviceTypes,
+                serviceFee: document.getElementById('serviceFee').value,
+                equipChange: document.getElementById('equipChange').value,
+                returnItem: document.getElementById('returnItem').value,
+                workItems: workItems,
+                inTime: document.getElementById('inTime').value,
+                outTime: document.getElementById('outTime').value,
+                staffName: document.getElementById('staffName').value,
+                clientSignature: clientCanvas.toDataURL(),
+                staffSignature: staffCanvas.toDataURL()
             };
 
-            const GAS_URL = "您的_GOOGLE_APPS_SCRIPT_網頁應用程式網址";
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbwcqdGv_CgDlOwurmYHxn-iHhsnhyJYGdeZgcUCECX11zUwgurzFluPtzweBkrtEi9knA/exec";
 
             try {
-                let response = await fetch(GAS_URL, {
+                await fetch(GAS_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // 跨域設定
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(payload)
                 });
-                alert('報告已成功送出！');
-                document.getElementById('reportForm').reset();
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                alert('服務報告書已成功送出並寫入 Google 試算表！');
+                document.getElementById('serviceForm').reset();
+                document.getElementById('date').valueAsDate = new Date();
+                clearCanvas('clientCanvas');
+                clearCanvas('staffCanvas');
             } catch (err) {
-                alert('送出失敗，請檢查網路連線：' + err);
+                alert('上傳發生錯誤：' + err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "確認無誤，送出報告並同步至 Google 試算表";
             }
         });
     </script>
