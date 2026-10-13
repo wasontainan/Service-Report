@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>華勝科技 - 服務報告書</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-4">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-6">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">服務報告書填寫</h2>
+        
+        <form id="reportForm" class="space-y-4">
+            <!-- 客戶名稱 -->
+            <div>
+                <label class="block text-gray-700 font-medium">客戶名稱</label>
+                <input type="text" id="customerName" required class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- 報修單號 -->
+            <div>
+                <label class="block text-gray-700 font-medium">報修單號</label>
+                <input type="text" id="reportNo" required class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- 工作內容 -->
+            <div>
+                <label class="block text-gray-700 font-medium">工作內容說明</label>
+                <textarea id="workContent" rows="3" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <!-- 現場拍照 -->
+            <div>
+                <label class="block text-gray-700 font-medium">現場照片上傳</label>
+                <input type="file" id="photoInput" accept="image/*" capture="environment" class="w-full mt-1 p-2 border rounded-lg">
+            </div>
+
+            <!-- 簽名畫布 -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">客戶簽名</label>
+                <canvas id="sigCanvas" width="350" height="150" class="border border-gray-300 rounded-lg w-full bg-gray-50 cursor-crosshair"></canvas>
+                <button type="button" id="clearSig" class="mt-1 text-sm text-red-600 hover:underline">清除簽名</button>
+            </div>
+
+            <!-- 提交按鈕 -->
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition">
+                送出報告並同步至試算表
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // 簡單的簽名畫布邏輯
+        const canvas = document.getElementById('sigCanvas');
+        const ctx = canvas.getContext('2d');
+        let painting = false;
+
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+        
+        // 支援觸控螢幕
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPosition(e.touches[0]); });
+        canvas.addEventListener('touchend', (e) => { e.preventDefault(); endPosition(); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+
+        function startPosition(e) { painting = true; draw(e); }
+        function endPosition() { painting = false; ctx.beginPath(); }
+        function draw(e) {
+            if (!painting) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        document.getElementById('clearSig').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        // 表單送出處理
+        document.getElementById('reportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                reportNo: document.getElementById('reportNo').value,
+                workContent: document.getElementById('workContent').value,
+                signature: canvas.toDataURL(), // 轉成 Base64 傳輸
+                photo: "" // 實際應用可將圖片轉 Base64 或上傳至 Imgur/Drive
+            };
+
+            const GAS_URL = "您的_GOOGLE_APPS_SCRIPT_網頁應用程式網址";
+
+            try {
+                let response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // 跨域設定
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                alert('報告已成功送出！');
+                document.getElementById('reportForm').reset();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            } catch (err) {
+                alert('送出失敗，請檢查網路連線：' + err);
+            }
+        });
+    </script>
+</body>
+</html>
