@@ -99,7 +99,6 @@
                 <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與比例量測</h3>
                 
                 <div class="space-y-3 text-xs">
-                    <!-- 項目一 -->
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>設備基本功能測試（幫浦、攪拌、PID 溫控）</span>
@@ -110,7 +109,6 @@
                         </div>
                         <input type="text" id="reason_func" placeholder="若勾選異常，請填寫狀況說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
-                    <!-- 項目二 -->
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>主要配件與項目齊全（壓力桶、槍架等點交完畢）</span>
@@ -121,7 +119,6 @@
                         </div>
                         <input type="text" id="reason_parts" placeholder="若勾選異常，請填寫狀況說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
-                    <!-- 項目三 -->
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>相關出廠檢驗與操作手冊文件已提供</span>
@@ -132,7 +129,6 @@
                         </div>
                         <input type="text" id="reason_docs" placeholder="若勾選異常，請填寫狀況說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
-                    <!-- 項目四 -->
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>機台安裝定位與水平校正確認完畢</span>
@@ -385,7 +381,7 @@
             document.getElementById(inputId).classList.toggle('hidden', val !== '異常');
         }
 
-        // 圖片預覽功能
+        // 圖片複選預覽
         function previewImages(input, previewId) {
             const container = document.getElementById(previewId);
             container.innerHTML = '';
@@ -539,25 +535,30 @@
                 staffName: document.getElementById('staffName').value
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbxjA0xgAp3YA9VWtXx_HpNAlPC3i8K410rlAeHOHxUzSkOVHCRvX8e34pfy_B3NZaY3PQ/exec"; // 請確認已填入正確網址
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbxquWIxlURNDQSyFpPw_1AX_eQTtRVG8NfVhs_-DO4xrJy0n9Ey4E4bjapO9WUdArwfaw/exec"; // 請替換為您的 GAS 網址
 
             try {
-                await fetch(GAS_URL, {
+                const response = await fetch(GAS_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
-                alert('報告已成功送出！狀態：待主管簽核');
-                localStorage.removeItem('serviceReportDraft');
-                document.getElementById('serviceForm').reset();
-                document.getElementById('date').valueAsDate = new Date();
-                clearCanvas('clientCanvas');
-                clearCanvas('staffCanvas');
-                clearCanvas('trainCanvas');
-                toggleSections();
+                
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert('報告已成功送出！編號：' + result.reportNo + '，狀態：待主管簽核');
+                    localStorage.removeItem('serviceReportDraft');
+                    document.getElementById('serviceForm').reset();
+                    document.getElementById('date').valueAsDate = new Date();
+                    clearCanvas('clientCanvas');
+                    clearCanvas('staffCanvas');
+                    clearCanvas('trainCanvas');
+                    toggleSections();
+                } else {
+                    alert('伺服器回報錯誤：' + result.message);
+                }
             } catch (err) {
-                alert('送出失敗：' + err);
+                alert('連線失敗或網址錯誤：' + err.message);
             } finally {
                 btn.disabled = false;
                 btn.textContent = "確認無誤，送出報告（狀態：待主管簽核）";
