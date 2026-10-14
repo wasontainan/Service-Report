@@ -381,7 +381,6 @@
             document.getElementById(inputId).classList.toggle('hidden', val !== '異常');
         }
 
-        // 圖片複選預覽
         function previewImages(input, previewId) {
             const container = document.getElementById(previewId);
             container.innerHTML = '';
@@ -485,6 +484,7 @@
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
+        // 表單送出 (對應 Google Sheets 欄位順序)
         document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -493,46 +493,37 @@
 
             const serviceTypes = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
 
-            const materialItems = [];
-            document.querySelectorAll('.material-row').forEach(row => {
-                materialItems.push({
-                    partNo: row.querySelector('.mat-no').value || "待補",
-                    partName: row.querySelector('.mat-name').value,
-                    qty: row.querySelector('.mat-qty').value
-                });
-            });
-
-            const ratioTests = [];
-            document.querySelectorAll('.ratio-row').forEach(row => {
-                ratioTests.push({
-                    groupName: row.querySelector('.ratio-group').value,
-                    targetRatio: row.querySelector('.ratio-target').value,
-                    qtyA: row.querySelector('.ratio-a').value,
-                    qtyB: row.querySelector('.ratio-b').value,
-                    actualRatio: row.querySelector('.ratio-actual').textContent,
-                    deviation: row.querySelector('.ratio-dev').textContent,
-                    judge: row.querySelector('.ratio-judge').textContent
-                });
-            });
+            const checkResults = {
+                func: document.getElementById('chk_inst_func')?.value + (document.getElementById('reason_func')?.value ? ": " + document.getElementById('reason_func').value : ""),
+                parts: document.getElementById('chk_inst_parts')?.value + (document.getElementById('reason_parts')?.value ? ": " + document.getElementById('reason_parts').value : ""),
+                docs: document.getElementById('chk_inst_docs')?.value + (document.getElementById('reason_docs')?.value ? ": " + document.getElementById('reason_docs').value : ""),
+                level: document.getElementById('chk_inst_level')?.value + (document.getElementById('reason_level')?.value ? ": " + document.getElementById('reason_level').value : "")
+            };
 
             const payload = {
-                reportNo: document.getElementById('reportNo').value,
-                date: document.getElementById('date').value,
-                customerName: document.getElementById('customerName').value,
-                phone: document.getElementById('phone').value,
-                contactPerson: document.getElementById('contactPerson').value,
-                address: document.getElementById('address').value,
-                repairNo: document.getElementById('repairNo').value,
-                machineNo: document.getElementById('machineNo').value,
-                serviceType: serviceTypes,
-                serviceFee: document.getElementById('serviceFee').value,
-                equipChange: document.getElementById('equipChange').value,
-                returnItem: document.getElementById('returnItem').value,
-                materialItems: materialItems,
-                ratioTests: ratioTests,
-                clientSignature: document.getElementById('clientCanvas').toDataURL(),
-                staffSignature: document.getElementById('staffCanvas').toDataURL(),
-                staffName: document.getElementById('staffName').value
+                reportNo: document.getElementById('reportNo').value,          // A 欄
+                date: document.getElementById('date').value,                  // B 欄
+                customerName: document.getElementById('customerName').value,  // C 欄
+                phone: document.getElementById('phone').value,                // D 欄
+                contactPerson: document.getElementById('contactPerson').value,// E 欄
+                address: document.getElementById('address').value,            // F 欄
+                repairNo: document.getElementById('repairNo').value,          // G 欄
+                machineType: "",                                              // H 欄
+                machineNo: document.getElementById('machineNo').value,        // I 欄
+                serviceType: serviceTypes.join(", "),                         // J 欄
+                otherDesc: "",                                                // K 欄
+                serviceFee: document.getElementById('serviceFee').value,      // L 欄
+                warrantyStatus: "",                                           // M 欄
+                equipChange: document.getElementById('equipChange').value,    // N 欄
+                changeNo: "",                                                 // O 欄
+                changeReason: "",                                             // P 欄
+                overallResult: "待主管簽核",                                    // Q 欄 (狀態)
+                checklistSummary: JSON.stringify(checkResults),               // R 欄
+                staffName: document.getElementById('staffName').value,        // S 欄
+                clientSigner: "",                                             // T 欄
+                clientSignature: "已簽名",                                     // U 欄
+                staffSignature: "已簽名",                                      // V 欄
+                totalHours: 0                                                 // AB 欄
             };
 
             const GAS_URL = "https://script.google.com/macros/s/AKfycby7CjaX0Q_dgilIfMMGSEAtjoPGNTtWWJZrTx3FCeKYqFHra0iiXEAmEyFTQeTiUu3i4w/exec"; // 請替換為您的 GAS 網址
