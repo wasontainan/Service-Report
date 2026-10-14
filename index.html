@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>華勝科技股份有限公司 - 服務報告書系統</title>
-    <!-- Tailwind CSS -->
+    <title>華勝科技股份有限公司 - 智慧服務報告書</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; }
@@ -15,11 +14,11 @@
 
     <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
         
-        <!-- Header 標題區 -->
+        <!-- Header -->
         <div class="bg-slate-900 text-white p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-xl font-bold tracking-wider">WASON 華勝科技股份有限公司</h1>
-                <p class="text-xs text-slate-400 mt-1">服務報告書系統 - 現場數位化填寫介面</p>
+                <p class="text-xs text-slate-400 mt-1">智慧服務報告書系統 - 動態模組介面</p>
             </div>
             <div class="text-right text-xs text-slate-300 space-y-1">
                 <div>電話: +886-3-390-6300</div>
@@ -38,59 +37,113 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-700">日期</label>
-                        <input type="date" id="date" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="date" id="date" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">報告編號</label>
-                        <input type="text" id="reportNo" value="261008" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="reportNo" value="261008" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">客戶名稱</label>
-                        <input type="text" id="customerName" placeholder="例如：光陽" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="customerName" placeholder="例如：光陽" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">電話 / 分機</label>
-                        <input type="text" id="phone" placeholder="07-382-2526 #718" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="phone" placeholder="07-382-2526 #718" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">客戶聯絡人</label>
-                        <input type="text" id="contactPerson" placeholder="葉柏鈞 #718" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="contactPerson" placeholder="葉柏鈞 #718" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">報修單號</label>
-                        <input type="text" id="repairNo" placeholder="E101-2026..." class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="repairNo" placeholder="E101-2026..." class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-slate-700">住址</label>
-                        <input type="text" id="address" placeholder="高雄市三民區灣興街61號" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="address" placeholder="高雄市三民區灣興街61號" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">機台編號 / 機型</label>
-                        <input type="text" id="machineNo" placeholder="251947-1 G-380 AB" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="machineNo" placeholder="251947-1" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                 </div>
             </div>
 
-            <!-- 區塊二：服務性質與勾選選項 -->
+            <!-- 區塊二：服務性質選擇 (動態切換觸發點) -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 二、 服務性質與相關判定
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 二、 服務性質（勾選後自動展開對應區塊）
                 </h2>
 
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">服務性質 (可複選)</label>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="裝/試機" class="rounded text-blue-600"> <span class="text-sm">裝/試機</span></label>
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="修護" class="rounded text-blue-600"> <span class="text-sm">修護</span></label>
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="移機" class="rounded text-blue-600"> <span class="text-sm">移機</span></label>
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="教育訓練" class="rounded text-blue-600"> <span class="text-sm">教育訓練</span></label>
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="廠驗" class="rounded text-blue-600"> <span class="text-sm">廠驗</span></label>
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="打樣" class="rounded text-blue-600"> <span class="text-sm">打樣</span></label>
-                        <label class="flex items-center space-x-2 p-2.5 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100"><input type="checkbox" name="serviceType" value="其它" class="rounded text-blue-600"> <span class="text-sm">其它</span></label>
-                    </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <label class="flex items-center space-x-2 p-3 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100">
+                        <input type="checkbox" name="serviceType" value="裝/試機" onchange="toggleSections()" class="rounded text-blue-600"> <span class="text-sm font-medium">裝/試機</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-3 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100">
+                        <input type="checkbox" name="serviceType" value="修護" onchange="toggleSections()" class="rounded text-blue-600"> <span class="text-sm font-medium">修護</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-3 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100">
+                        <input type="checkbox" name="serviceType" value="移機" onchange="toggleSections()" class="rounded text-blue-600"> <span class="text-sm font-medium">移機</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-3 bg-slate-50 border rounded-lg cursor-pointer hover:bg-slate-100">
+                        <input type="checkbox" name="serviceType" value="教育訓練" onchange="toggleSections()" class="rounded text-blue-600"> <span class="text-sm font-medium">教育訓練</span>
+                    </label>
                 </div>
+            </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <!-- 區塊三-A：【裝機/試機專用】功能測試與比例測試 -->
+            <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
+                <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2">
+                    ⚙️ 裝機/試機專屬：出膠比例測試與配件點交
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left bg-white border rounded-lg">
+                        <thead class="bg-blue-100 text-slate-700">
+                            <tr>
+                                <th class="p-2">組別</th>
+                                <th class="p-2">目標比值 (A/B)</th>
+                                <th class="p-2">公差(±%)</th>
+                                <th class="p-2">A量(g)</th>
+                                <th class="p-2">B量(g)</th>
+                                <th class="p-2">判定</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ratioContainer">
+                            <tr>
+                                <td class="p-2"><input type="text" value="第一組" class="w-20 p-1 border rounded ratio-group"></td>
+                                <td class="p-2"><input type="text" value="100:20" class="w-20 p-1 border rounded ratio-target"></td>
+                                <td class="p-2"><input type="text" value="±2%" class="w-16 p-1 border rounded ratio-tolerance"></td>
+                                <td class="p-2"><input type="number" step="0.1" placeholder="100" class="w-16 p-1 border rounded ratio-a"></td>
+                                <td class="p-2"><input type="number" step="0.1" placeholder="20" class="w-16 p-1 border rounded ratio-b"></td>
+                                <td class="p-2 font-bold text-green-600 ratio-judge">合格</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" onclick="addRatioRow()" class="text-xs bg-blue-600 text-white px-3 py-1.5 rounded">+ 新增測試組別</button>
+            </div>
+
+            <!-- 區塊三-B：【修護專用】原因分析與處理對策 -->
+            <div id="repairSection" class="space-y-4 p-4 bg-amber-50/50 border border-amber-200 rounded-xl hidden">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2">
+                        🔧 修護專屬：故障現象、原因分析與照片上傳
+                    </h3>
+                    <button type="button" onclick="addWorkItem()" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded">+ 新增修護項目</button>
+                </div>
+                <div id="workItemsContainer" class="space-y-3">
+                    <!-- 動態加入 -->
+                </div>
+            </div>
+
+            <!-- 區塊四：用料明細與共同判定 -->
+            <div class="space-y-4">
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 用料明細與設備變更判定
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-700">服務費用</label>
                         <select id="serviceFee" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
@@ -113,73 +166,75 @@
                         </select>
                     </div>
                 </div>
-            </div>
 
-            <!-- 區塊三：工作內容與處理對策 -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center border-b pb-2">
-                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                        <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 工作內容原因分析與處理對策
-                    </h2>
-                    <button type="button" onclick="addWorkItem()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg transition">+ 新增項目</button>
-                </div>
-
-                <div id="workItemsContainer" class="space-y-3">
-                    <!-- 動態加入項目 -->
+                <!-- 更換零配件表格 -->
+                <div class="pt-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-sm font-medium text-slate-700">更換零配件紀錄 (用料明細)</label>
+                        <button type="button" onclick="addMaterialRow()" class="text-xs bg-slate-700 text-white px-2.5 py-1 rounded">+ 新增零件</button>
+                    </div>
+                    <div id="materialContainer" class="space-y-2"></div>
                 </div>
             </div>
 
-            <!-- 區塊四：工時與時間紀錄 -->
+            <!-- 區塊五：現場工時紀錄 -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 現場工時紀錄
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 五、 現場工時與時數紀錄
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">入廠時間</label>
-                        <input type="datetime-local" id="inTime" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        <label class="block text-xs font-medium text-slate-700">出發時間</label>
+                        <input type="datetime-local" id="departTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">出廠時間</label>
-                        <input type="datetime-local" id="outTime" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        <label class="block text-xs font-medium text-slate-700">入廠時間</label>
+                        <input type="datetime-local" id="inTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700">出廠時間</label>
+                        <input type="datetime-local" id="outTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700">返回時間</label>
+                        <input type="datetime-local" id="returnTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
                     </div>
                 </div>
             </div>
 
-            <!-- 區塊五：電子簽名 -->
+            <!-- 區塊六：簽名確認 -->
             <div class="space-y-6 pt-2">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 五、 確認與簽名
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 六、 確認與電子簽名
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">客戶確認簽名</label>
                         <div class="border border-slate-300 rounded-lg overflow-hidden canvas-box">
-                            <canvas id="clientCanvas" width="360" height="160" class="w-full cursor-crosshair"></canvas>
+                            <canvas id="clientCanvas" width="360" height="150" class="w-full cursor-crosshair"></canvas>
                         </div>
                         <button type="button" onclick="clearCanvas('clientCanvas')" class="mt-1 text-xs text-red-600 hover:underline">清除客戶簽名</button>
                     </div>
-
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">服務人員簽名</label>
                         <div class="border border-slate-300 rounded-lg overflow-hidden canvas-box">
-                            <canvas id="staffCanvas" width="360" height="160" class="w-full cursor-crosshair"></canvas>
+                            <canvas id="staffCanvas" width="360" height="150" class="w-full cursor-crosshair"></canvas>
                         </div>
                         <button type="button" onclick="clearCanvas('staffCanvas')" class="mt-1 text-xs text-red-600 hover:underline">清除服務人員簽名</button>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700">服務人員姓名/信箱</label>
+                    <label class="block text-sm font-medium text-slate-700">服務人員姓名</label>
                     <input type="text" id="staffName" value="Jay Huang" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                 </div>
             </div>
 
-            <!-- 送出按鈕 -->
+            <!-- 送出 -->
             <div class="pt-4">
                 <button type="submit" id="submitBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl transition shadow-md">
-                    確認無誤，送出報告並同步至 Google 試算表
+                    確認無誤，送出報告並同步至 Google 試算表各分頁
                 </button>
             </div>
 
@@ -187,63 +242,105 @@
     </div>
 
     <script>
-        // 設定預設日期
         document.getElementById('date').valueAsDate = new Date();
 
-        // 動態工作項目新增
-        function addWorkItem(desc = '', result = 'OK') {
+        // 動態切換顯示區塊
+        function toggleSections() {
+            const types = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
+            const installSec = document.getElementById('installSection');
+            const repairSec = document.getElementById('repairSection');
+
+            if (types.includes('裝/試機')) {
+                installSec.classList.remove('hidden');
+                if(document.getElementById('ratioContainer').children.length === 0) addRatioRow();
+            } else {
+                installSec.classList.add('hidden');
+            }
+
+            if (types.includes('修護')) {
+                repairSec.classList.remove('hidden');
+                if(document.getElementById('workItemsContainer').children.length === 0) addWorkItem();
+            } else {
+                repairSec.classList.add('hidden');
+            }
+        }
+
+        // 動態新增修護明細
+        function addWorkItem() {
             const container = document.getElementById('workItemsContainer');
-            const index = container.children.length + 1;
             const div = document.createElement('div');
-            div.className = "flex flex-col md:flex-row gap-2 items-start md:items-center bg-slate-50 p-3 rounded-lg border border-slate-200 work-item-row";
+            div.className = "bg-white p-3 rounded-lg border border-amber-200 space-y-2 work-item-row";
             div.innerHTML = `
-                <span class="text-xs font-bold text-slate-500 w-8">#${index}</span>
-                <input type="text" placeholder="工作內容說明與處理對策..." value="${desc}" class="work-desc flex-1 p-2 bg-white border border-slate-300 rounded text-sm w-full">
-                <select class="work-result p-2 bg-white border border-slate-300 rounded text-sm">
-                    <option value="OK" ${result==='OK'?'selected':''}>OK</option>
-                    <option value="待處理" ${result==='待處理'?'selected':''}>待處理</option>
-                </select>
-                <input type="file" accept="image/*" capture="environment" class="work-photo text-xs text-slate-500 w-full md:w-auto">
-                <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 text-xs px-2 py-1">刪除</button>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-amber-800">修護項目</span>
+                    <button type="button" onclick="this.closest('.work-item-row').remove()" class="text-red-500 text-xs">刪除</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <input type="text" placeholder="故障現象（例如：真空異常）" class="phenomenon p-2 border rounded text-xs">
+                    <input type="text" placeholder="原因分析與對策說明" class="cause-desc p-2 border rounded text-xs">
+                </div>
+                <div class="flex gap-4 text-xs text-slate-600 items-center">
+                    <div>處理前照片：<input type="file" accept="image/*" class="photo-before text-xs"></div>
+                    <div>處理後照片：<input type="file" accept="image/*" class="photo-after text-xs"></div>
+                </div>
             `;
             container.appendChild(div);
         }
-        // 預設給一個空白行
-        addWorkItem('膠槍保養、更換 A pump, 調整壓差錶');
 
-        // 簽名畫布通用邏輯
+        // 動態新增用料
+        function addMaterialRow() {
+            const container = document.getElementById('materialContainer');
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center material-row";
+            div.innerHTML = `
+                <input type="text" placeholder="料號" class="mat-no p-2 border rounded text-xs w-28">
+                <input type="text" placeholder="品名" class="mat-name p-2 border rounded text-xs flex-1">
+                <input type="number" placeholder="數量" value="1" class="mat-qty p-2 border rounded text-xs w-16">
+                <button type="button" onclick="this.closest('.material-row').remove()" class="text-red-500 text-xs px-2">刪除</button>
+            `;
+            container.appendChild(div);
+        }
+
+        // 動態新增比例測試
+        function addRatioRow() {
+            const container = document.getElementById('ratioContainer');
+            const tr = document.createElement('tr');
+            tr.className = "ratio-row border-t";
+            tr.innerHTML = `
+                <td class="p-2"><input type="text" value="組別" class="w-20 p-1 border rounded ratio-group"></td>
+                <td class="p-2"><input type="text" value="100:20" class="w-20 p-1 border rounded ratio-target"></td>
+                <td class="p-2"><input type="text" value="±2%" class="w-16 p-1 border rounded ratio-tolerance"></td>
+                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-a"></td>
+                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-b"></td>
+                <td class="p-2 font-bold text-green-600 ratio-judge">合格</td>
+            `;
+            container.appendChild(tr);
+        }
+
+        // 簽名板設定
         function setupCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             let painting = false;
-
             function getPos(e) {
                 const rect = canvas.getBoundingClientRect();
                 const clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 const clientY = e.clientY || (e.touches && e.touches[0].clientY);
                 return { x: clientX - rect.left, y: clientY - rect.top };
             }
-
             canvas.addEventListener('mousedown', (e) => { painting = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); });
             canvas.addEventListener('mouseup', () => { painting = false; });
             canvas.addEventListener('mousemove', (e) => { if (!painting) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
-
             canvas.addEventListener('touchstart', (e) => { e.preventDefault(); painting = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); });
             canvas.addEventListener('touchend', (e) => { e.preventDefault(); painting = false; });
             canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!painting) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
-
-            ctx.lineWidth = 2.5;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.strokeStyle = '#0f172a';
         }
-
         setupCanvas('clientCanvas');
         setupCanvas('staffCanvas');
-
         function clearCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
         // 表單送出
@@ -251,23 +348,40 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.textContent = "資料上傳中，請稍候...";
+            btn.textContent = "多分頁資料同步寫入中...";
 
-            // 收集勾選的服務性質
-            const serviceTypes = [];
-            document.querySelectorAll('input[name="serviceType"]:checked').forEach(cb => serviceTypes.push(cb.value));
+            const serviceTypes = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
 
-            // 收集工作明細
+            // 收集修護明細
             const workItems = [];
             document.querySelectorAll('.work-item-row').forEach(row => {
                 workItems.push({
-                    content: row.querySelector('.work-desc').value,
-                    result: row.querySelector('.work-result').value
+                    phenomenon: row.querySelector('.phenomenon').value,
+                    causeAnalysis: row.querySelector('.cause-desc').value,
+                    result: "OK"
                 });
             });
 
-            const clientCanvas = document.getElementById('clientCanvas');
-            const staffCanvas = document.getElementById('staffCanvas');
+            // 收集用料
+            const materialItems = [];
+            document.querySelectorAll('.material-row').forEach(row => {
+                materialItems.push({
+                    partNo: row.querySelector('.mat-no').value,
+                    partName: row.querySelector('.mat-name').value,
+                    qty: row.querySelector('.mat-qty').value
+                });
+            });
+
+            // 收集比例測試
+            const ratioTests = [];
+            document.querySelectorAll('.ratio-row').forEach(row => {
+                ratioTests.push({
+                    groupName: row.querySelector('.ratio-group').value,
+                    targetRatio: row.querySelector('.ratio-target').value,
+                    qtyA: row.querySelector('.ratio-a').value,
+                    qtyB: row.querySelector('.ratio-b').value
+                });
+            });
 
             const payload = {
                 reportNo: document.getElementById('reportNo').value,
@@ -283,14 +397,20 @@
                 equipChange: document.getElementById('equipChange').value,
                 returnItem: document.getElementById('returnItem').value,
                 workItems: workItems,
-                inTime: document.getElementById('inTime').value,
-                outTime: document.getElementById('outTime').value,
+                materialItems: materialItems,
+                ratioTests: ratioTests,
+                workHours: {
+                    departTime: document.getElementById('departTime').value,
+                    inTime: document.getElementById('inTime').value,
+                    outTime: document.getElementById('outTime').value,
+                    returnTime: document.getElementById('returnTime').value
+                },
                 staffName: document.getElementById('staffName').value,
-                clientSignature: clientCanvas.toDataURL(),
-                staffSignature: staffCanvas.toDataURL()
+                clientSignature: document.getElementById('clientCanvas').toDataURL(),
+                staffSignature: document.getElementById('staffCanvas').toDataURL()
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbwcqdGv_CgDlOwurmYHxn-iHhsnhyJYGdeZgcUCECX11zUwgurzFluPtzweBkrtEi9knA/exec";
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbyRPKd5HRnsxUF9q-M9wQdkV3rGqtnAHT7CCaskNFpwMVottRycyowspj3CvxC_8QriYg/exec"; // 請替換為您的 GAS 部署網址
 
             try {
                 await fetch(GAS_URL, {
@@ -299,16 +419,16 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                alert('服務報告書已成功送出並寫入 Google 試算表！');
+                alert('報告已成功分派寫入 Google 試算表各分頁！');
                 document.getElementById('serviceForm').reset();
                 document.getElementById('date').valueAsDate = new Date();
                 clearCanvas('clientCanvas');
                 clearCanvas('staffCanvas');
             } catch (err) {
-                alert('上傳發生錯誤：' + err);
+                alert('寫入失敗：' + err);
             } finally {
                 btn.disabled = false;
-                btn.textContent = "確認無誤，送出報告並同步至 Google 試算表";
+                btn.textContent = "確認無誤，送出報告並同步至 Google 試算表各分頁";
             }
         });
     </script>
