@@ -18,7 +18,7 @@
         <div class="bg-slate-900 text-white p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-xl font-bold tracking-wider">WASON 華勝科技股份有限公司</h1>
-                <p class="text-xs text-slate-400 mt-1">智慧服務報告書系統 - 完整功能版</p>
+                <p class="text-xs text-slate-400 mt-1">智慧服務報告書系統 - 現場動態填寫介面</p>
             </div>
             <div class="text-right text-xs text-slate-300 space-y-1">
                 <span class="bg-amber-500 text-slate-900 px-2 py-0.5 rounded font-bold text-xs">流程狀態：待主管簽核</span>
@@ -96,14 +96,15 @@
                 </div>
             </div>
 
-            <!-- 1. 裝/試機專用區塊 (含異常動態備註) -->
+            <!-- 1. 裝/試機專用區塊 (改為泵浦、預設空白) -->
             <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與點交</h3>
                 <div class="space-y-3 text-xs">
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
-                            <span>設備基本功能測試（幫浦、攪拌、PID 溫控）</span>
+                            <span>設備基本功能測試（泵浦、攪拌、PID 溫控）</span>
                             <select id="chk_inst_func" onchange="toggleReason('chk_inst_func', 'reason_func')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="正常">正常</option>
                                 <option value="異常">異常</option>
                             </select>
@@ -114,6 +115,7 @@
                         <div class="flex justify-between items-center font-medium">
                             <span>主要配件與項目齊全（壓力桶、槍架等點交完畢）</span>
                             <select id="chk_inst_parts" onchange="toggleReason('chk_inst_parts', 'reason_parts')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="正常">正常</option>
                                 <option value="異常">異常</option>
                             </select>
@@ -124,6 +126,7 @@
                         <div class="flex justify-between items-center font-medium">
                             <span>相關出廠檢驗與操作手冊文件已提供</span>
                             <select id="chk_inst_docs" onchange="toggleReason('chk_inst_docs', 'reason_docs')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="正常">正常</option>
                                 <option value="異常">異常</option>
                             </select>
@@ -134,6 +137,7 @@
                         <div class="flex justify-between items-center font-medium">
                             <span>機台安裝定位與水平校正確認完畢</span>
                             <select id="chk_inst_level" onchange="toggleReason('chk_inst_level', 'reason_level')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="正常">正常</option>
                                 <option value="異常">異常</option>
                             </select>
@@ -152,28 +156,36 @@
                 <div id="workItemsContainer" class="space-y-3"></div>
             </div>
 
-            <!-- 3. 移機專用區塊 (含異常動態備註) -->
+            <!-- 3. 移機專用區塊 (預設空白) -->
             <div id="moveSection" class="space-y-4 p-4 bg-purple-50/50 border border-purple-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-purple-900">📦 【移機】定位與管路檢查</h3>
                 <div class="space-y-2 text-xs">
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>復電後主機與控制系統正常啟動</span>
-                            <select id="move_power" onchange="toggleReason('move_power', 'reason_move_power')" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
+                            <select id="move_power" onchange="toggleReason('move_power', 'reason_move_power')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
+                                <option value="正常">正常</option>
+                                <option value="異常">異常</option>
+                            </select>
                         </div>
                         <input type="text" id="reason_move_power" placeholder="若異常請填寫備註說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>管路氣密與液密性檢查（無漏氣漏液）</span>
-                            <select id="move_leak" onchange="toggleReason('move_leak', 'reason_move_leak')" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
+                            <select id="move_leak" onchange="toggleReason('move_leak', 'reason_move_leak')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
+                                <option value="正常">正常</option>
+                                <option value="異常">異常</option>
+                            </select>
                         </div>
                         <input type="text" id="reason_move_leak" placeholder="若異常請填寫備註說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
                 </div>
             </div>
 
-            <!-- 4. 教育訓練專用區塊 (完整項目與動態備註) -->
+            <!-- 4. 教育訓練專用區塊 (預設空白) -->
             <div id="trainSection" class="space-y-4 p-4 bg-emerald-50/50 border border-emerald-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-emerald-900">🎓 【教育訓練】操作手冊、文件點交與項目確認</h3>
                 <div class="space-y-3 text-xs">
@@ -181,6 +193,7 @@
                         <div class="flex justify-between items-center font-medium">
                             <span>教育訓練文件與操作手冊是否齊全</span>
                             <select id="train_docs" onchange="toggleReason('train_docs', 'reason_train_docs')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="齊全">齊全</option>
                                 <option value="欠缺">欠缺</option>
                             </select>
@@ -191,6 +204,7 @@
                         <div class="flex justify-between items-center font-medium">
                             <span>設備日常維護與安全操作教學完成</span>
                             <select id="train_safe" onchange="toggleReason('train_safe', 'reason_train_safe')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="完成">完成</option>
                                 <option value="未完成">未完成</option>
                             </select>
@@ -201,6 +215,7 @@
                         <div class="flex justify-between items-center font-medium">
                             <span>客戶端受訓人員操作考核與問答完成</span>
                             <select id="train_test" onchange="toggleReason('train_test', 'reason_train_test')" class="p-1 border rounded text-xs">
+                                <option value="">請選擇</option>
                                 <option value="合格">合格</option>
                                 <option value="需追蹤">需追蹤</option>
                             </select>
@@ -210,7 +225,7 @@
                 </div>
             </div>
 
-            <!-- 區塊三：用料明細與服務費用 -->
+            <!-- 區塊三：用料明細與服務費用 (設備變更動態展開設變單號) -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 用料明細與服務費用
@@ -225,10 +240,15 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700">設備變更</label>
-                        <select id="equipChange" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        <select id="equipChange" onchange="toggleEquipChangeNo()" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                             <option value="否">否</option>
                             <option value="是">是</option>
                         </select>
+                    </div>
+                    <!-- 當設備變更為「是」時動態展開 -->
+                    <div id="equipChangeNoBox" class="md:col-span-2 hidden">
+                        <label class="block text-sm font-medium text-amber-800">設變單號 <span class="text-red-500">*</span></label>
+                        <input type="text" id="changeNo" placeholder="請輸入工程設變單號 (ECN)..." class="w-full mt-1 p-2.5 bg-amber-50 border border-amber-300 rounded-lg text-sm">
                     </div>
                 </div>
             </div>
@@ -274,7 +294,7 @@
 
     <!-- 隱藏提交容器 (徹底消除 CORS / Failed to fetch 錯誤) -->
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { handleSuccess(); }"></iframe>
-    <form id="gasHiddenForm" action="https://script.google.com/macros/s/AKfycbwLGzPW2LN5Oiomech7zNMsdCdh1sq1Aj2LpsGx0rNmBp4xC-6_wKNp6ujHpj6YK83v_g/exec" method="POST" target="hidden_iframe" style="display:none;">
+    <form id="gasHiddenForm" action="https://script.google.com/macros/s/AKfycbzRlhgoVRCXxjdfo_zk3tUndgC8gateFO81b7x7x4QgHXQDhEdY6FJ7E8M_l-ifjPZV/exec" style="display:none;">
         <input type="hidden" name="payload" id="gasPayload">
     </form>
 
@@ -289,6 +309,7 @@
             document.getElementById('date').valueAsDate = new Date();
             clearCanvas('clientCanvas');
             clearCanvas('staffCanvas');
+            toggleEquipChangeNo();
             
             const btn = document.getElementById('submitBtn');
             btn.disabled = false;
@@ -340,6 +361,11 @@
             document.getElementById(inputId).classList.toggle('hidden', !showReason);
         }
 
+        function toggleEquipChangeNo() {
+            const val = document.getElementById('equipChange').value;
+            document.getElementById('equipChangeNoBox').classList.toggle('hidden', val !== '是');
+        }
+
         function addWorkItem() {
             const container = document.getElementById('workItemsContainer');
             const div = document.createElement('div');
@@ -384,6 +410,16 @@
         // 表單送出事件：包裝 Payload 並透過隱藏 Form 安全提交
         document.getElementById('serviceForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // 檢查設備變更為「是」時是否已填寫設變單號
+            const equipChangeVal = document.getElementById('equipChange').value;
+            const changeNoVal = document.getElementById('changeNo').value.trim();
+            if (equipChangeVal === '是' && !changeNoVal) {
+                alert('請填寫工程設變單號！');
+                document.getElementById('changeNo').focus();
+                return;
+            }
+
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.textContent = "資料安全傳輸中...";
@@ -392,15 +428,15 @@
 
             const checkResults = {
                 install: {
-                    func: document.getElementById('chk_inst_func')?.value + (document.getElementById('reason_func')?.value ? " (" + document.getElementById('reason_func').value + ")" : ""),
-                    parts: document.getElementById('chk_inst_parts')?.value + (document.getElementById('reason_parts')?.value ? " (" + document.getElementById('reason_parts').value + ")" : ""),
-                    docs: document.getElementById('chk_inst_docs')?.value + (document.getElementById('reason_docs')?.value ? " (" + document.getElementById('reason_docs').value + ")" : ""),
-                    level: document.getElementById('chk_inst_level')?.value + (document.getElementById('reason_level')?.value ? " (" + document.getElementById('reason_level').value + ")" : "")
+                    func: (document.getElementById('chk_inst_func')?.value || "未勾選") + (document.getElementById('reason_func')?.value ? " (" + document.getElementById('reason_func').value + ")" : ""),
+                    parts: (document.getElementById('chk_inst_parts')?.value || "未勾選") + (document.getElementById('reason_parts')?.value ? " (" + document.getElementById('reason_parts').value + ")" : ""),
+                    docs: (document.getElementById('chk_inst_docs')?.value || "未勾選") + (document.getElementById('reason_docs')?.value ? " (" + document.getElementById('reason_docs').value + ")" : ""),
+                    level: (document.getElementById('chk_inst_level')?.value || "未勾選") + (document.getElementById('reason_level')?.value ? " (" + document.getElementById('reason_level').value + ")" : "")
                 },
                 train: {
-                    docs: document.getElementById('train_docs')?.value + (document.getElementById('reason_train_docs')?.value ? " (" + document.getElementById('reason_train_docs').value + ")" : ""),
-                    safe: document.getElementById('train_safe')?.value + (document.getElementById('reason_train_safe')?.value ? " (" + document.getElementById('reason_train_safe').value + ")" : ""),
-                    test: document.getElementById('train_test')?.value + (document.getElementById('reason_train_test')?.value ? " (" + document.getElementById('reason_train_test').value + ")" : "")
+                    docs: (document.getElementById('train_docs')?.value || "未勾選") + (document.getElementById('reason_train_docs')?.value ? " (" + document.getElementById('reason_train_docs').value + ")" : ""),
+                    safe: (document.getElementById('train_safe')?.value || "未勾選") + (document.getElementById('reason_train_safe')?.value ? " (" + document.getElementById('reason_train_safe').value + ")" : ""),
+                    test: (document.getElementById('train_test')?.value || "未勾選") + (document.getElementById('reason_train_test')?.value ? " (" + document.getElementById('reason_train_test').value + ")" : "")
                 }
             };
 
@@ -415,20 +451,20 @@
                 contactPerson: document.getElementById('contactPerson').value,
                 address: document.getElementById('address').value,
                 repairNo: document.getElementById('repairNo').value,
-                machineType: document.getElementById('machineType').value,  // 機型獨立
-                machineNo: document.getElementById('machineNo').value,      // 機台序號獨立
+                machineType: document.getElementById('machineType').value,
+                machineNo: document.getElementById('machineNo').value,
                 serviceType: serviceTypes.join(", "),
                 serviceFee: document.getElementById('serviceFee').value,
-                equipChange: document.getElementById('equipChange').value,
+                equipChange: equipChangeVal,
+                changeNo: changeNoVal, // 設變單號 (寫入 O 欄)
                 overallResult: "待主管簽核",
                 checklistSummary: JSON.stringify(checkResults),
                 staffName: document.getElementById('staffName').value,
-                clientSignature: clientCanvas.toDataURL(),  // 完整保存雙手簽 Base64
+                clientSignature: clientCanvas.toDataURL(),
                 staffSignature: staffCanvas.toDataURL(),
                 totalHours: 0
             };
 
-            // 打包寫入隱藏 Form 並提交，徹底避開 CORS/Failed to fetch 限制
             document.getElementById('gasPayload').value = JSON.stringify(payload);
             submitted = true;
             document.getElementById('gasHiddenForm').submit();
