@@ -64,7 +64,7 @@
                         <input type="text" id="address" placeholder="高雄市三民區灣興街61號" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">機台編號 / 機型</label>
+                        <label class="block text-sm font-medium text-slate-700">機台序號 / 機型</label>
                         <input type="text" id="machineNo" placeholder="251947-1 G-380" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
                 </div>
@@ -92,12 +92,9 @@
                 </div>
             </div>
 
-            <!-- ================= 動態展開區塊 (正常/異常選項) ================= -->
-
-            <!-- 1. 裝/試機專用 -->
+            <!-- 動態展開區塊 (正常/異常選項) -->
             <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與比例量測</h3>
-                
                 <div class="space-y-3 text-xs">
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
@@ -140,103 +137,14 @@
                         <input type="text" id="reason_level" placeholder="若勾選異常，請填寫狀況說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
                 </div>
-
-                <!-- 比例測試表 -->
-                <div class="overflow-x-auto pt-2">
-                    <table class="w-full text-xs text-left bg-white border rounded-lg">
-                        <thead class="bg-blue-100 text-slate-700">
-                            <tr>
-                                <th class="p-2">組別</th>
-                                <th class="p-2">目標比值 (A/B)</th>
-                                <th class="p-2">A量(g)</th>
-                                <th class="p-2">B量(g)</th>
-                                <th class="p-2">實測比值</th>
-                                <th class="p-2">偏差%</th>
-                                <th class="p-2">判定</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ratioContainer">
-                            <tr class="ratio-row">
-                                <td class="p-2"><input type="text" value="第1組" class="w-16 p-1 border rounded ratio-group"></td>
-                                <td class="p-2"><input type="number" value="5" step="0.1" class="w-16 p-1 border rounded ratio-target" oninput="calcRatio(this)"></td>
-                                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-a" oninput="calcRatio(this)" placeholder="100"></td>
-                                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-b" oninput="calcRatio(this)" placeholder="20"></td>
-                                <td class="p-2 ratio-actual font-mono">-</td>
-                                <td class="p-2 ratio-dev font-mono">-</td>
-                                <td class="p-2 ratio-judge font-bold text-slate-400">待測</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- 複數照片上傳與預覽 -->
-                <div class="pt-2">
-                    <label class="block text-xs font-medium text-slate-700 mb-1">裝機/試機完工現場照片上傳 (可多張)：</label>
-                    <input type="file" id="installPhotos" accept="image/*" multiple onchange="previewImages(this, 'installPreview')" class="text-xs">
-                    <div id="installPreview" class="flex flex-wrap gap-2 mt-2"></div>
-                </div>
             </div>
-
-            <!-- 2. 修護專用 -->
-            <div id="repairSection" class="space-y-4 p-4 bg-amber-50/50 border border-amber-200 rounded-xl hidden">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-amber-900">🔧 【修護】故障原因分析與處理對策</h3>
-                    <button type="button" onclick="addWorkItem()" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded">+ 新增修護項目</button>
-                </div>
-                <div id="workItemsContainer" class="space-y-3"></div>
-            </div>
-
-            <!-- 3. 移機專用 -->
-            <div id="moveSection" class="space-y-4 p-4 bg-purple-50/50 border border-purple-200 rounded-xl hidden">
-                <h3 class="text-sm font-bold text-purple-900">📦 【移機】定位與管路檢查</h3>
-                <div class="space-y-2 text-xs">
-                    <div class="p-2 bg-white rounded border flex justify-between items-center">
-                        <span>復電後主機與控制系統正常啟動</span>
-                        <select id="move_power" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
-                    </div>
-                    <div class="p-2 bg-white rounded border flex justify-between items-center">
-                        <span>管路氣密與液密性檢查（無漏氣漏液）</span>
-                        <select id="move_leak" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <label class="block text-xs font-medium text-slate-700 mb-1">移機完工照片上傳 (可多張)：</label>
-                    <input type="file" id="movePhotos" accept="image/*" multiple onchange="previewImages(this, 'movePreview')" class="text-xs">
-                    <div id="movePreview" class="flex flex-wrap gap-2 mt-2"></div>
-                </div>
-            </div>
-
-            <!-- 4. 教育訓練專用 -->
-            <div id="trainSection" class="space-y-4 p-4 bg-emerald-50/50 border border-emerald-200 rounded-xl hidden">
-                <h3 class="text-sm font-bold text-emerald-900">🎓 【教育訓練】點交與簽名確認</h3>
-                <div class="space-y-2 text-xs">
-                    <div class="p-2 bg-white rounded border flex justify-between items-center">
-                        <span>設備操作與 HMI 設定教學完成</span>
-                        <select id="train_hmi" class="p-1 border rounded text-xs"><option value="完成">完成</option><option value="未完成">未完成</option></select>
-                    </div>
-                    <div class="p-2 bg-white rounded border flex justify-between items-center">
-                        <span>日常維護與膠槍拆裝教學完成</span>
-                        <select id="train_maint" class="p-1 border rounded text-xs"><option value="完成">完成</option><option value="未完成">未完成</option></select>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-700 mb-1">受訓人員簽名確認：</label>
-                    <div class="border border-slate-300 rounded-lg overflow-hidden canvas-box bg-white">
-                        <canvas id="trainCanvas" width="360" height="120" class="w-full cursor-crosshair"></canvas>
-                    </div>
-                    <button type="button" onclick="clearCanvas('trainCanvas')" class="mt-1 text-xs text-red-600 hover:underline">清除受訓人員簽名</button>
-                </div>
-            </div>
-
-            <!-- ================= 共同欄位 ================= -->
 
             <!-- 區塊三：用料明細 -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 用料明細與回廠物件紀錄
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 用料明細與服務費用
                 </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-700">服務費用</label>
                         <select id="serviceFee" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
@@ -248,56 +156,16 @@
                         <label class="block text-sm font-medium text-slate-700">設備變更</label>
                         <select id="equipChange" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                             <option value="否">否</option>
-                            <option value="是">是 (需開立工程變更單)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700">是否有回廠物料</label>
-                        <select id="returnItem" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
-                            <option value="否">否</option>
                             <option value="是">是</option>
                         </select>
                     </div>
                 </div>
-
-                <div class="pt-2">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="text-sm font-medium text-slate-700">更換零配件紀錄 (料號選填)</label>
-                        <button type="button" onclick="addMaterialRow()" class="text-xs bg-slate-700 text-white px-2.5 py-1 rounded">+ 新增零件</button>
-                    </div>
-                    <div id="materialContainer" class="space-y-2"></div>
-                </div>
             </div>
 
-            <!-- 區塊四：工時紀錄 -->
-            <div class="space-y-4">
-                <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 現場工時與時數紀錄
-                </h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700">出發時間</label>
-                        <input type="datetime-local" id="departTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700">入廠時間</label>
-                        <input type="datetime-local" id="inTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700">出廠時間</label>
-                        <input type="datetime-local" id="outTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700">返回時間</label>
-                        <input type="datetime-local" id="returnTime" class="w-full mt-1 p-2 bg-slate-50 border rounded text-xs">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 區塊五：簽名確認 -->
+            <!-- 區塊四：簽名確認 -->
             <div class="space-y-6 pt-2">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 五、 確認與電子簽名
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 確認與電子簽名
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -323,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- 送出 -->
+            <!-- 送出按鈕 -->
             <div class="pt-4">
                 <button type="submit" id="submitBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl transition shadow-md">
                     確認無誤，送出報告（狀態：待主管簽核）
@@ -367,96 +235,11 @@
         function toggleSections() {
             const types = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
             document.getElementById('installSection').classList.toggle('hidden', !types.includes('裝/試機'));
-            document.getElementById('repairSection').classList.toggle('hidden', !types.includes('修護'));
-            document.getElementById('moveSection').classList.toggle('hidden', !types.includes('移機'));
-            document.getElementById('trainSection').classList.toggle('hidden', !types.includes('教育訓練'));
-
-            if (types.includes('修護') && document.getElementById('workItemsContainer').children.length === 0) {
-                addWorkItem();
-            }
         }
 
         function toggleReason(selectId, inputId) {
             const val = document.getElementById(selectId).value;
             document.getElementById(inputId).classList.toggle('hidden', val !== '異常');
-        }
-
-        function previewImages(input, previewId) {
-            const container = document.getElementById(previewId);
-            container.innerHTML = '';
-            if (input.files) {
-                Array.from(input.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = "w-16 h-16 object-cover rounded border shadow-sm";
-                        container.appendChild(img);
-                    }
-                    reader.readAsDataURL(file);
-                });
-            }
-        }
-
-        function calcRatio(element) {
-            const row = element.closest('.ratio-row');
-            const target = parseFloat(row.querySelector('.ratio-target').value) || 0;
-            const a = parseFloat(row.querySelector('.ratio-a').value) || 0;
-            const b = parseFloat(row.querySelector('.ratio-b').value) || 0;
-            
-            const actualCell = row.querySelector('.ratio-actual');
-            const devCell = row.querySelector('.ratio-dev');
-            const judgeCell = row.querySelector('.ratio-judge');
-
-            if (b > 0 && target > 0) {
-                const actual = a / b;
-                const dev = ((actual - target) / target) * 100;
-                actualCell.textContent = actual.toFixed(2);
-                devCell.textContent = dev.toFixed(1) + '%';
-
-                if (Math.abs(dev) <= 2.0) {
-                    judgeCell.textContent = "合格";
-                    judgeCell.className = "ratio-judge font-bold text-green-600";
-                } else {
-                    judgeCell.textContent = "異常";
-                    judgeCell.className = "ratio-judge font-bold text-red-600";
-                }
-            } else {
-                actualCell.textContent = "-";
-                devCell.textContent = "-";
-                judgeCell.textContent = "待測";
-                judgeCell.className = "ratio-judge font-bold text-slate-400";
-            }
-        }
-
-        function addWorkItem() {
-            const container = document.getElementById('workItemsContainer');
-            const div = document.createElement('div');
-            div.className = "bg-white p-3 rounded-lg border border-amber-200 space-y-2 work-item-row";
-            div.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-amber-800">修護項目</span>
-                    <button type="button" onclick="this.closest('.work-item-row').remove()" class="text-red-500 text-xs">刪除</button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <input type="text" placeholder="故障現象" class="phenomenon p-2 border rounded text-xs">
-                    <input type="text" placeholder="原因分析與對策說明" class="cause-desc p-2 border rounded text-xs">
-                </div>
-            `;
-            container.appendChild(div);
-        }
-
-        function addMaterialRow() {
-            const container = document.getElementById('materialContainer');
-            const div = document.createElement('div');
-            div.className = "flex gap-2 items-center material-row";
-            div.innerHTML = `
-                <input type="text" placeholder="料號 (選填)" class="mat-no p-2 border rounded text-xs w-32">
-                <input type="text" placeholder="品名" class="mat-name p-2 border rounded text-xs flex-1">
-                <input type="number" placeholder="數量" value="1" class="mat-qty p-2 border rounded text-xs w-16">
-                <button type="button" onclick="this.closest('.material-row').remove()" class="text-red-500 text-xs px-2">刪除</button>
-            `;
-            container.appendChild(div);
         }
 
         function setupCanvas(canvasId) {
@@ -477,14 +260,13 @@
         }
         setupCanvas('clientCanvas');
         setupCanvas('staffCanvas');
-        setupCanvas('trainCanvas');
 
         function clearCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // 表單送出 (對應 Google Sheets 欄位順序)
+        // 表單送出事件
         document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -500,38 +282,34 @@
                 level: document.getElementById('chk_inst_level')?.value + (document.getElementById('reason_level')?.value ? ": " + document.getElementById('reason_level').value : "")
             };
 
+            const clientCanvas = document.getElementById('clientCanvas');
+            const staffCanvas = document.getElementById('staffCanvas');
+
             const payload = {
-                reportNo: document.getElementById('reportNo').value,          // A 欄
-                date: document.getElementById('date').value,                  // B 欄
-                customerName: document.getElementById('customerName').value,  // C 欄
-                phone: document.getElementById('phone').value,                // D 欄
-                contactPerson: document.getElementById('contactPerson').value,// E 欄
-                address: document.getElementById('address').value,            // F 欄
-                repairNo: document.getElementById('repairNo').value,          // G 欄
-                machineType: "",                                              // H 欄
-                machineNo: document.getElementById('machineNo').value,        // I 欄
-                serviceType: serviceTypes.join(", "),                         // J 欄
-                otherDesc: "",                                                // K 欄
-                serviceFee: document.getElementById('serviceFee').value,      // L 欄
-                warrantyStatus: "",                                           // M 欄
-                equipChange: document.getElementById('equipChange').value,    // N 欄
-                changeNo: "",                                                 // O 欄
-                changeReason: "",                                             // P 欄
-                overallResult: "待主管簽核",                                    // Q 欄 (狀態)
-                checklistSummary: JSON.stringify(checkResults),               // R 欄
-                staffName: document.getElementById('staffName').value,        // S 欄
-                clientSigner: "",                                             // T 欄
-                clientSignature: "已簽名",                                     // U 欄
-                staffSignature: "已簽名",                                      // V 欄
-                totalHours: 0                                                 // AB 欄
+                reportNo: document.getElementById('reportNo').value,
+                date: document.getElementById('date').value,
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                address: document.getElementById('address').value,
+                repairNo: document.getElementById('repairNo').value,
+                machineNo: document.getElementById('machineNo').value,
+                serviceType: serviceTypes.join(", "),
+                serviceFee: document.getElementById('serviceFee').value,
+                equipChange: document.getElementById('equipChange').value,
+                overallResult: "待主管簽核",
+                checklistSummary: JSON.stringify(checkResults),
+                staffName: document.getElementById('staffName').value,
+                clientSignature: clientCanvas.toDataURL(),
+                staffSignature: staffCanvas.toDataURL(),
+                totalHours: 0
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbwUlSlnOL5o32lTNUbiiWvB10LtnKjGIDeDDbdv_zdD5f6bCX0EXtjDcYNgecd7_rahEg/exec"; // 請替換為您的 GAS 網址
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbyFDr5cEExo34bI_9bOt7pVJLRTdpzs5-xyfMbwlmuini8VjP6p1E34CCuLB6cDAk841w/exec"; // 請在此填入您的正式 GAS 網址
 
             try {
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
                 
@@ -543,8 +321,6 @@
                     document.getElementById('date').valueAsDate = new Date();
                     clearCanvas('clientCanvas');
                     clearCanvas('staffCanvas');
-                    clearCanvas('trainCanvas');
-                    toggleSections();
                 } else {
                     alert('伺服器回報錯誤：' + result.message);
                 }
