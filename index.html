@@ -28,7 +28,7 @@
 
         <form id="serviceForm" oninput="saveDraft()" class="p-6 md:p-8 space-y-8">
             
-            <!-- 區塊一：基本資料 (機台序號與機型分開) -->
+            <!-- 區塊一：基本資料 (機型與機台序號獨立) -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 一、 基本資料與客戶資訊
@@ -63,7 +63,6 @@
                         <label class="block text-sm font-medium text-slate-700">住址</label>
                         <input type="text" id="address" placeholder="高雄市三民區灣興街61號" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                     </div>
-                    <!-- 獨立分開：機型 與 機台序號 -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700">機型</label>
                         <input type="text" id="machineType" placeholder="G-380 AB膠設備" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
@@ -97,7 +96,7 @@
                 </div>
             </div>
 
-            <!-- 1. 裝/試機專用區塊 (含完整備註) -->
+            <!-- 1. 裝/試機專用區塊 (含異常動態備註) -->
             <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與點交</h3>
                 <div class="space-y-3 text-xs">
@@ -144,7 +143,7 @@
                 </div>
             </div>
 
-            <!-- 2. 修護專用區塊 (多筆作業明細) -->
+            <!-- 2. 修護專用區塊 -->
             <div id="repairSection" class="space-y-4 p-4 bg-amber-50/50 border border-amber-200 rounded-xl hidden">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold text-amber-900">🔧 【修護】故障原因分析與處理對策</h3>
@@ -153,7 +152,7 @@
                 <div id="workItemsContainer" class="space-y-3"></div>
             </div>
 
-            <!-- 3. 移機專用區塊 (含備註) -->
+            <!-- 3. 移機專用區塊 (含異常動態備註) -->
             <div id="moveSection" class="space-y-4 p-4 bg-purple-50/50 border border-purple-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-purple-900">📦 【移機】定位與管路檢查</h3>
                 <div class="space-y-2 text-xs">
@@ -162,19 +161,19 @@
                             <span>復電後主機與控制系統正常啟動</span>
                             <select id="move_power" onchange="toggleReason('move_power', 'reason_move_power')" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
                         </div>
-                        <input type="text" id="reason_move_power" placeholder="若異常請填寫備註..." class="w-full p-1 border rounded hidden text-xs">
+                        <input type="text" id="reason_move_power" placeholder="若異常請填寫備註說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
                     <div class="p-2 bg-white rounded border space-y-1">
                         <div class="flex justify-between items-center font-medium">
                             <span>管路氣密與液密性檢查（無漏氣漏液）</span>
                             <select id="move_leak" onchange="toggleReason('move_leak', 'reason_move_leak')" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
                         </div>
-                        <input type="text" id="reason_move_leak" placeholder="若異常請填寫備註..." class="w-full p-1 border rounded hidden text-xs">
+                        <input type="text" id="reason_move_leak" placeholder="若異常請填寫備註說明..." class="w-full p-1 border rounded hidden text-xs">
                     </div>
                 </div>
             </div>
 
-            <!-- 4. 教育訓練專用區塊 (完整恢復：文件是否齊全、操作手冊、點交簽名) -->
+            <!-- 4. 教育訓練專用區塊 (完整項目與動態備註) -->
             <div id="trainSection" class="space-y-4 p-4 bg-emerald-50/50 border border-emerald-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-emerald-900">🎓 【教育訓練】操作手冊、文件點交與項目確認</h3>
                 <div class="space-y-3 text-xs">
@@ -273,8 +272,29 @@
         </form>
     </div>
 
+    <!-- 隱藏提交容器 (徹底消除 CORS / Failed to fetch 錯誤) -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { handleSuccess(); }"></iframe>
+    <form id="gasHiddenForm" action="https://script.google.com/macros/s/AKfycbwLGzPW2LN5Oiomech7zNMsdCdh1sq1Aj2LpsGx0rNmBp4xC-6_wKNp6ujHpj6YK83v_g/exec" method="POST" target="hidden_iframe" style="display:none;">
+        <input type="hidden" name="payload" id="gasPayload">
+    </form>
+
     <script>
+        var submitted = false;
         document.getElementById('date').valueAsDate = new Date();
+
+        function handleSuccess() {
+            alert('報告已成功送出！狀態：待主管簽核');
+            localStorage.removeItem('serviceReportDraft');
+            document.getElementById('serviceForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            clearCanvas('clientCanvas');
+            clearCanvas('staffCanvas');
+            
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = false;
+            btn.textContent = "確認無誤，送出報告（狀態：待主管簽核）";
+            submitted = false;
+        }
 
         function saveDraft() {
             const formData = {
@@ -316,7 +336,6 @@
 
         function toggleReason(selectId, inputId) {
             const val = document.getElementById(selectId).value;
-            // 只要選到異常、欠缺、未完成、需追蹤等非正常/完成選項，就展開備註欄位
             const showReason = (val === '異常' || val === '欠缺' || val === '未完成' || val === '需追蹤');
             document.getElementById(inputId).classList.toggle('hidden', !showReason);
         }
@@ -362,15 +381,15 @@
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        document.getElementById('serviceForm').addEventListener('submit', async function(e) {
+        // 表單送出事件：包裝 Payload 並透過隱藏 Form 安全提交
+        document.getElementById('serviceForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.textContent = "資料傳輸中...";
+            btn.textContent = "資料安全傳輸中...";
 
             const serviceTypes = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
 
-            // 蒐集各項檢核與備註
             const checkResults = {
                 install: {
                     func: document.getElementById('chk_inst_func')?.value + (document.getElementById('reason_func')?.value ? " (" + document.getElementById('reason_func').value + ")" : ""),
@@ -404,36 +423,15 @@
                 overallResult: "待主管簽核",
                 checklistSummary: JSON.stringify(checkResults),
                 staffName: document.getElementById('staffName').value,
-                clientSignature: clientCanvas.toDataURL(),
+                clientSignature: clientCanvas.toDataURL(),  // 完整保存雙手簽 Base64
                 staffSignature: staffCanvas.toDataURL(),
                 totalHours: 0
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbynb_CxbieAgDK4NNGv5QFNPCZDx4Og2kGn1pQSv8Pml4GqK485kad60T8neNf8EvnALg/exec"; // 請填入您的 GAS 網址
-
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-                
-                const result = await response.json();
-                if (result.status === "success") {
-                    alert('報告已成功送出！編號：' + result.reportNo + '，狀態：待主管簽核');
-                    localStorage.removeItem('serviceReportDraft');
-                    document.getElementById('serviceForm').reset();
-                    document.getElementById('date').valueAsDate = new Date();
-                    clearCanvas('clientCanvas');
-                    clearCanvas('staffCanvas');
-                } else {
-                    alert('伺服器回報錯誤：' + result.message);
-                }
-            } catch (err) {
-                alert('連線失敗或網址錯誤：' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = "確認無誤，送出報告（狀態：待主管簽核）";
-            }
+            // 打包寫入隱藏 Form 並提交，徹底避開 CORS/Failed to fetch 限制
+            document.getElementById('gasPayload').value = JSON.stringify(payload);
+            submitted = true;
+            document.getElementById('gasHiddenForm').submit();
         });
     </script>
 </body>
