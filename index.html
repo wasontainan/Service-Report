@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <!-- 區塊二：服務性質選擇 -->
+            <!-- 區塊二：服務性質選擇（動態展開） -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 二、 服務性質（動態展開）
@@ -92,7 +92,7 @@
                 </div>
             </div>
 
-            <!-- 動態展開區塊 -->
+            <!-- 1. 裝/試機專用區塊 -->
             <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與比例量測</h3>
                 <div class="space-y-3 text-xs">
@@ -139,7 +139,42 @@
                 </div>
             </div>
 
-            <!-- 區塊三：用料明細 -->
+            <!-- 2. 修護專用區塊 -->
+            <div id="repairSection" class="space-y-4 p-4 bg-amber-50/50 border border-amber-200 rounded-xl hidden">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-amber-900">🔧 【修護】故障原因分析與處理對策</h3>
+                    <button type="button" onclick="addWorkItem()" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded">+ 新增修護項目</button>
+                </div>
+                <div id="workItemsContainer" class="space-y-3"></div>
+            </div>
+
+            <!-- 3. 移機專用區塊 -->
+            <div id="moveSection" class="space-y-4 p-4 bg-purple-50/50 border border-purple-200 rounded-xl hidden">
+                <h3 class="text-sm font-bold text-purple-900">📦 【移機】定位與管路檢查</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="p-2 bg-white rounded border flex justify-between items-center">
+                        <span>復電後主機與控制系統正常啟動</span>
+                        <select id="move_power" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
+                    </div>
+                    <div class="p-2 bg-white rounded border flex justify-between items-center">
+                        <span>管路氣密與液密性檢查（無漏氣漏液）</span>
+                        <select id="move_leak" class="p-1 border rounded text-xs"><option value="正常">正常</option><option value="異常">異常</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 教育訓練專用區塊 -->
+            <div id="trainSection" class="space-y-4 p-4 bg-emerald-50/50 border border-emerald-200 rounded-xl hidden">
+                <h3 class="text-sm font-bold text-emerald-900">🎓 【教育訓練】點交與簽名確認</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="p-2 bg-white rounded border flex justify-between items-center">
+                        <span>設備操作與 HMI 設定教學完成</span>
+                        <select id="train_hmi" class="p-1 border rounded text-xs"><option value="完成">完成</option><option value="未完成">未完成</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊三：用料明細與服務費用 -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 用料明細與服務費用
@@ -162,7 +197,7 @@
                 </div>
             </div>
 
-            <!-- 區塊四：簽名確認 -->
+            <!-- 區塊四：確認與電子簽名 -->
             <div class="space-y-6 pt-2">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 確認與電子簽名
@@ -235,11 +270,31 @@
         function toggleSections() {
             const types = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
             document.getElementById('installSection').classList.toggle('hidden', !types.includes('裝/試機'));
+            document.getElementById('repairSection').classList.toggle('hidden', !types.includes('修護'));
+            document.getElementById('moveSection').classList.toggle('hidden', !types.includes('移機'));
+            document.getElementById('trainSection').classList.toggle('hidden', !types.includes('教育訓練'));
         }
 
         function toggleReason(selectId, inputId) {
             const val = document.getElementById(selectId).value;
             document.getElementById(inputId).classList.toggle('hidden', val !== '異常');
+        }
+
+        function addWorkItem() {
+            const container = document.getElementById('workItemsContainer');
+            const div = document.createElement('div');
+            div.className = "bg-white p-3 rounded-lg border border-amber-200 space-y-2 work-item-row";
+            div.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-amber-800">修護項目</span>
+                    <button type="button" onclick="this.closest('.work-item-row').remove()" class="text-red-500 text-xs">刪除</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <input type="text" placeholder="故障現象" class="phenomenon p-2 border rounded text-xs">
+                    <input type="text" placeholder="原因分析與對策說明" class="cause-desc p-2 border rounded text-xs">
+                </div>
+            `;
+            container.appendChild(div);
         }
 
         function setupCanvas(canvasId) {
@@ -266,7 +321,7 @@
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // 輕量化送出：只傳送狀態標記，避免 Base64 檔案過大導致 fetch 失敗
+        // 表單送出事件：完美保留雙手寫簽名圖檔
         document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -281,6 +336,9 @@
                 docs: document.getElementById('chk_inst_docs')?.value + (document.getElementById('reason_docs')?.value ? ": " + document.getElementById('reason_docs').value : ""),
                 level: document.getElementById('chk_inst_level')?.value + (document.getElementById('reason_level')?.value ? ": " + document.getElementById('reason_level').value : "")
             };
+
+            const clientCanvas = document.getElementById('clientCanvas');
+            const staffCanvas = document.getElementById('staffCanvas');
 
             const payload = {
                 reportNo: document.getElementById('reportNo').value,
@@ -297,12 +355,12 @@
                 overallResult: "待主管簽核",
                 checklistSummary: JSON.stringify(checkResults),
                 staffName: document.getElementById('staffName').value,
-                clientSignature: "已簽名",
-                staffSignature: "已簽名",
+                clientSignature: clientCanvas.toDataURL(),  // 傳遞客戶手簽圖檔
+                staffSignature: staffCanvas.toDataURL(),   // 傳遞服務人員手簽圖檔
                 totalHours: 0
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbzIeMcdywzRfavGD_mnL4QFeqIEBhQOSX-LGKC5ebdt3YUESM6N9JCxkrGxHkPK7RASng/exec"; // 請填入你的 GAS 網址
+            const GAS_URL = "https://script.google.com/macros/s/AKfycby8REuVplnRW8uwukah6rETHrTwhBjLxMesJg0wL01IeVujT1HKZP7sdqhUOj04K0ApvQ/exec"; // 請換成您的 GAS 網址
 
             try {
                 const response = await fetch(GAS_URL, {
