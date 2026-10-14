@@ -10,7 +10,7 @@
         .canvas-box { touch-action: none; background: #fafafa; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-8 px-4">
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-8 px-4" onload="loadDraft()">
 
     <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
         
@@ -18,15 +18,15 @@
         <div class="bg-slate-900 text-white p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-xl font-bold tracking-wider">WASON 華勝科技股份有限公司</h1>
-                <p class="text-xs text-slate-400 mt-1">智慧服務報告書系統 - 現場動態模組介面</p>
+                <p class="text-xs text-slate-400 mt-1">智慧服務報告書系統 - 內部簽核與動態填寫介面</p>
             </div>
             <div class="text-right text-xs text-slate-300 space-y-1">
+                <span class="bg-amber-500 text-slate-900 px-2 py-0.5 rounded font-bold text-xs">流程狀態：待主管簽核</span>
                 <div>電話: +886-3-390-6300</div>
-                <div>桃園市大溪區介壽路328號</div>
             </div>
         </div>
 
-        <form id="serviceForm" class="p-6 md:p-8 space-y-8">
+        <form id="serviceForm" oninput="saveDraft()" class="p-6 md:p-8 space-y-8">
             
             <!-- 區塊一：基本資料 -->
             <div class="space-y-4">
@@ -70,10 +70,10 @@
                 </div>
             </div>
 
-            <!-- 區塊二：服務性質選擇 (動態切換觸發點) -->
+            <!-- 區塊二：服務性質選擇 -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 二、 服務性質（勾選後動態展開對應項目）
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 二、 服務性質（動態展開）
                 </h2>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -92,63 +92,68 @@
                 </div>
             </div>
 
-            <!-- ================= 專屬動態展開區塊 ================= -->
+            <!-- ================= 動態展開區塊 ================= -->
 
-            <!-- 1. 裝/試機專用區塊 -->
+            <!-- 1. 裝/試機專用 -->
             <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
-                <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2">
-                    ⚙️ 【裝機 / 試機】專屬檢核與比例測試
-                </h3>
-                <div class="space-y-2 text-xs">
-                    <label class="flex items-center gap-2"><input type="checkbox" id="chk_inst_func" class="rounded"> 設備基本功能測試（幫浦、攪拌、PID 溫控正常）</label>
-                    <label class="flex items-center gap-2"><input type="checkbox" id="chk_inst_parts" class="rounded"> 主要配件與項目齊全（壓力桶、槍架、清洗桶等點交完畢）</label>
+                <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與比例量測</h3>
+                <div class="space-y-3 text-xs">
+                    <div class="space-y-1">
+                        <label class="flex items-center gap-2 font-medium">
+                            <input type="checkbox" id="chk_inst_func" onchange="togglePumpDesc()" class="rounded"> 設備基本功能測試（幫浦、攪拌、PID 溫控）
+                        </label>
+                        <input type="text" id="pumpExceptionDesc" placeholder="若測試異常，請在此填寫狀況說明..." class="w-full p-2 border rounded bg-white hidden text-xs">
+                    </div>
+                    <label class="flex items-center gap-2"><input type="checkbox" id="chk_inst_parts" class="rounded"> 主要配件與項目齊全（壓力桶、槍架等點交完畢）</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_inst_docs" class="rounded"> 相關出廠檢驗與操作手冊文件已提供</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_inst_level" class="rounded"> 機台安裝定位與水平校正確認完畢</label>
                 </div>
-                <!-- 比例測試表 -->
+
+                <!-- 比例測試表 (即時計算偏差) -->
                 <div class="overflow-x-auto pt-2">
                     <table class="w-full text-xs text-left bg-white border rounded-lg">
                         <thead class="bg-blue-100 text-slate-700">
                             <tr>
                                 <th class="p-2">組別</th>
                                 <th class="p-2">目標比值 (A/B)</th>
-                                <th class="p-2">公差</th>
                                 <th class="p-2">A量(g)</th>
                                 <th class="p-2">B量(g)</th>
+                                <th class="p-2">實測比值</th>
+                                <th class="p-2">偏差%</th>
                                 <th class="p-2">判定</th>
                             </tr>
                         </thead>
                         <tbody id="ratioContainer">
-                            <tr>
-                                <td class="p-2"><input type="text" value="第一組" class="w-20 p-1 border rounded ratio-group"></td>
-                                <td class="p-2"><input type="text" value="100:20" class="w-20 p-1 border rounded ratio-target"></td>
-                                <td class="p-2"><input type="text" value="±2%" class="w-16 p-1 border rounded ratio-tolerance"></td>
-                                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-a"></td>
-                                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-b"></td>
-                                <td class="p-2 font-bold text-green-600">合格</td>
+                            <tr class="ratio-row">
+                                <td class="p-2"><input type="text" value="第1組" class="w-16 p-1 border rounded ratio-group"></td>
+                                <td class="p-2"><input type="number" value="5" step="0.1" class="w-16 p-1 border rounded ratio-target" oninput="calcRatio(this)" title="例如 100:20 請填 5"></td>
+                                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-a" oninput="calcRatio(this)" placeholder="100"></td>
+                                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-b" oninput="calcRatio(this)" placeholder="20"></td>
+                                <td class="p-2 ratio-actual font-mono">-</td>
+                                <td class="p-2 ratio-dev font-mono">-</td>
+                                <td class="p-2 ratio-judge font-bold text-slate-400">待測</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <button type="button" onclick="addRatioRow()" class="text-xs bg-blue-600 text-white px-3 py-1.5 rounded">+ 新增比例測試組別</button>
+                <div class="pt-2">
+                    <label class="block text-xs font-medium text-slate-700 mb-1">裝機/試機完工與測試現場照片上傳：</label>
+                    <input type="file" id="installPhoto" accept="image/*" capture="environment" class="text-xs">
+                </div>
             </div>
 
-            <!-- 2. 修護專用區塊 -->
+            <!-- 2. 修護專用 -->
             <div id="repairSection" class="space-y-4 p-4 bg-amber-50/50 border border-amber-200 rounded-xl hidden">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2">
-                        🔧 【修護】專屬故障與處理對策紀錄
-                    </h3>
+                    <h3 class="text-sm font-bold text-amber-900">🔧 【修護】故障原因分析與處理對策</h3>
                     <button type="button" onclick="addWorkItem()" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded">+ 新增修護項目</button>
                 </div>
                 <div id="workItemsContainer" class="space-y-3"></div>
             </div>
 
-            <!-- 3. 移機專用區塊 -->
+            <!-- 3. 移機專用 -->
             <div id="moveSection" class="space-y-4 p-4 bg-purple-50/50 border border-purple-200 rounded-xl hidden">
-                <h3 class="text-sm font-bold text-purple-900 flex items-center gap-2">
-                    📦 【移機】專屬定位與點交檢核
-                </h3>
+                <h3 class="text-sm font-bold text-purple-900">📦 【移機】定位與管路檢查</h3>
                 <div class="space-y-2 text-xs">
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_move_power" class="rounded"> 復電後主機與控制系統正常啟動（無報錯）</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_move_leak" class="rounded"> 氣壓/液壓管路重新接合之氣密與液密性檢查（無漏氣漏液）</label>
@@ -160,28 +165,29 @@
                 </div>
             </div>
 
-            <!-- 4. 教育訓練專用區塊 -->
+            <!-- 4. 教育訓練專用 -->
             <div id="trainSection" class="space-y-4 p-4 bg-emerald-50/50 border border-emerald-200 rounded-xl hidden">
-                <h3 class="text-sm font-bold text-emerald-900 flex items-center gap-2">
-                    🎓 【教育訓練】點交與內容確認
-                </h3>
+                <h3 class="text-sm font-bold text-emerald-900">🎓 【教育訓練】點交與簽名確認</h3>
                 <div class="space-y-2 text-xs">
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_train_hmi" class="rounded"> 設備基本操作與人機介面 (HMI) 設定教學完成</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_train_maint" class="rounded"> 日常維護、膠槍拆裝與保養清潔流程教學完成</label>
                     <label class="flex items-center gap-2"><input type="checkbox" id="chk_train_docs" class="rounded"> 相關操作手冊與電路圖文件已提供給客戶</label>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-700">受訓人員簽名 / 備註：</label>
-                    <input type="text" id="trainRemark" placeholder="記錄受訓人員姓名與理解狀況" class="w-full mt-1 p-2 bg-white border rounded text-xs">
+                    <label class="block text-xs font-medium text-slate-700 mb-1">受訓人員簽名確認：</label>
+                    <div class="border border-slate-300 rounded-lg overflow-hidden canvas-box bg-white">
+                        <canvas id="trainCanvas" width="360" height="120" class="w-full cursor-crosshair"></canvas>
+                    </div>
+                    <button type="button" onclick="clearCanvas('trainCanvas')" class="mt-1 text-xs text-red-600 hover:underline">清除受訓人員簽名</button>
                 </div>
             </div>
 
-            <!-- ================= 共同欄位區塊 ================= -->
+            <!-- ================= 共同欄位 ================= -->
 
-            <!-- 區塊四：用料明細與設備變更 -->
+            <!-- 區塊三：用料明細 (料號選填 + 回廠物料) -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 用料明細與設備變更判定
+                    <span class="w-2 h-5 bg-blue-600 rounded"></span> 三、 用料明細與回廠物件紀錄
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -200,25 +206,25 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">回廠物件</label>
+                        <label class="block text-sm font-medium text-slate-700">是否有回廠物料</label>
                         <select id="returnItem" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
                             <option value="否">否</option>
-                            <option value="是">是</option>
+                            <option value="是">是 (須於下方或備註註明)</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- 更換零配件表格 -->
+                <!-- 更換零配件表格 (料號選填) -->
                 <div class="pt-2">
                     <div class="flex justify-between items-center mb-2">
-                        <label class="text-sm font-medium text-slate-700">更換零配件紀錄 (用料明細)</label>
+                        <label class="text-sm font-medium text-slate-700">更換零配件紀錄 (料號可先不填，後續候補)</label>
                         <button type="button" onclick="addMaterialRow()" class="text-xs bg-slate-700 text-white px-2.5 py-1 rounded">+ 新增零件</button>
                     </div>
                     <div id="materialContainer" class="space-y-2"></div>
                 </div>
             </div>
 
-            <!-- 區塊五：現場工時紀錄 -->
+            <!-- 區塊四：工時紀錄 -->
             <div class="space-y-4">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 四、 現場工時與時數紀錄
@@ -243,7 +249,7 @@
                 </div>
             </div>
 
-            <!-- 區塊六：簽名確認 -->
+            <!-- 區塊五：簽名確認 -->
             <div class="space-y-6 pt-2">
                 <h2 class="text-base font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
                     <span class="w-2 h-5 bg-blue-600 rounded"></span> 五、 確認與電子簽名
@@ -275,7 +281,7 @@
             <!-- 送出 -->
             <div class="pt-4">
                 <button type="submit" id="submitBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl transition shadow-md">
-                    確認無誤，送出報告並同步至 Google 試算表各分頁
+                    確認無誤，送出報告（狀態：待主管簽核）
                 </button>
             </div>
 
@@ -285,10 +291,38 @@
     <script>
         document.getElementById('date').valueAsDate = new Date();
 
-        // 根據勾選的服務性質動態展開對應區塊
+        // ── 草稿自動暫存機制 (LocalStorage) ──
+        function saveDraft() {
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                reportNo: document.getElementById('reportNo').value,
+                phone: document.getElementById('phone').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                repairNo: document.getElementById('repairNo').value,
+                address: document.getElementById('address').value,
+                machineNo: document.getElementById('machineNo').value,
+                staffName: document.getElementById('staffName').value
+            };
+            localStorage.setItem('serviceReportDraft', JSON.stringify(formData));
+        }
+
+        function loadDraft() {
+            const saved = localStorage.getItem('serviceReportDraft');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if(data.customerName) document.getElementById('customerName').value = data.customerName;
+                if(data.reportNo) document.getElementById('reportNo').value = data.reportNo;
+                if(data.phone) document.getElementById('phone').value = data.phone;
+                if(data.contactPerson) document.getElementById('contactPerson').value = data.contactPerson;
+                if(data.repairNo) document.getElementById('repairNo').value = data.repairNo;
+                if(data.address) document.getElementById('address').value = data.address;
+                if(data.machineNo) document.getElementById('machineNo').value = data.machineNo;
+            }
+        }
+
+        // 動態切換顯示區塊
         function toggleSections() {
             const types = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
-            
             document.getElementById('installSection').classList.toggle('hidden', !types.includes('裝/試機'));
             document.getElementById('repairSection').classList.toggle('hidden', !types.includes('修護'));
             document.getElementById('moveSection').classList.toggle('hidden', !types.includes('移機'));
@@ -296,6 +330,44 @@
 
             if (types.includes('修護') && document.getElementById('workItemsContainer').children.length === 0) {
                 addWorkItem();
+            }
+        }
+
+        function togglePumpDesc() {
+            const chk = document.getElementById('chk_inst_func').checked;
+            document.getElementById('pumpExceptionDesc').classList.toggle('hidden', !chk); // 可依需求調整勾選邏輯
+        }
+
+        // 比例即時計算與判定
+        function calcRatio(element) {
+            const row = element.closest('.ratio-row');
+            const target = parseFloat(row.querySelector('.ratio-target').value) || 0;
+            const a = parseFloat(row.querySelector('.ratio-a').value) || 0;
+            const b = parseFloat(row.querySelector('.ratio-b').value) || 0;
+            
+            const actualCell = row.querySelector('.ratio-actual');
+            const devCell = row.querySelector('.ratio-dev');
+            const judgeCell = row.querySelector('.ratio-judge');
+
+            if (b > 0 && target > 0) {
+                const actual = a / b;
+                const dev = ((actual - target) / target) * 100;
+                actualCell.textContent = actual.toFixed(2);
+                devCell.textContent = dev.toFixed(1) + '%';
+
+                // 容許公差 ±2% 內為合格
+                if (Math.abs(dev) <= 2.0) {
+                    judgeCell.textContent = "合格";
+                    judgeCell.className = "ratio-judge font-bold text-green-600";
+                } else {
+                    judgeCell.textContent = "異常";
+                    judgeCell.className = "ratio-judge font-bold text-red-600";
+                }
+            } else {
+                actualCell.textContent = "-";
+                devCell.textContent = "-";
+                judgeCell.textContent = "待測";
+                judgeCell.className = "ratio-judge font-bold text-slate-400";
             }
         }
 
@@ -312,10 +384,6 @@
                     <input type="text" placeholder="故障現象（例如：真空異常）" class="phenomenon p-2 border rounded text-xs">
                     <input type="text" placeholder="原因分析與對策說明" class="cause-desc p-2 border rounded text-xs">
                 </div>
-                <div class="flex gap-4 text-xs text-slate-600 items-center">
-                    <div>處理前照片：<input type="file" accept="image/*" class="photo-before text-xs"></div>
-                    <div>處理後照片：<input type="file" accept="image/*" class="photo-after text-xs"></div>
-                </div>
             `;
             container.appendChild(div);
         }
@@ -325,27 +393,12 @@
             const div = document.createElement('div');
             div.className = "flex gap-2 items-center material-row";
             div.innerHTML = `
-                <input type="text" placeholder="料號" class="mat-no p-2 border rounded text-xs w-28">
-                <input type="text" placeholder="品名" class="mat-name p-2 border rounded text-xs flex-1">
+                <input type="text" placeholder="料號 (選填/待補)" class="mat-no p-2 border rounded text-xs w-32">
+                <input type="text" placeholder="品名 (例如：油封)" class="mat-name p-2 border rounded text-xs flex-1">
                 <input type="number" placeholder="數量" value="1" class="mat-qty p-2 border rounded text-xs w-16">
                 <button type="button" onclick="this.closest('.material-row').remove()" class="text-red-500 text-xs px-2">刪除</button>
             `;
             container.appendChild(div);
-        }
-
-        function addRatioRow() {
-            const container = document.getElementById('ratioContainer');
-            const tr = document.createElement('tr');
-            tr.className = "ratio-row border-t";
-            tr.innerHTML = `
-                <td class="p-2"><input type="text" value="組別" class="w-20 p-1 border rounded ratio-group"></td>
-                <td class="p-2"><input type="text" value="100:20" class="w-20 p-1 border rounded ratio-target"></td>
-                <td class="p-2"><input type="text" value="±2%" class="w-16 p-1 border rounded ratio-tolerance"></td>
-                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-a"></td>
-                <td class="p-2"><input type="number" step="0.1" class="w-16 p-1 border rounded ratio-b"></td>
-                <td class="p-2 font-bold text-green-600">合格</td>
-            `;
-            container.appendChild(tr);
         }
 
         function setupCanvas(canvasId) {
@@ -366,53 +419,26 @@
         }
         setupCanvas('clientCanvas');
         setupCanvas('staffCanvas');
+        setupCanvas('trainCanvas');
+
         function clearCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
+        // 表單送出
         document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.textContent = "動態多分頁資料同步寫入中...";
+            btn.textContent = "資料傳輸中（狀態：待主管簽核）...";
 
             const serviceTypes = Array.from(document.querySelectorAll('input[name="serviceType"]:checked')).map(cb => cb.value);
-
-            // 收集動態檢核結果
-            const dynamicChecks = {
-                install: {
-                    func: document.getElementById('chk_inst_func')?.checked || false,
-                    parts: document.getElementById('chk_inst_parts')?.checked || false,
-                    docs: document.getElementById('chk_inst_docs')?.checked || false,
-                    level: document.getElementById('chk_inst_level')?.checked || false
-                },
-                move: {
-                    power: document.getElementById('chk_move_power')?.checked || false,
-                    leak: document.getElementById('chk_move_leak')?.checked || false,
-                    level: document.getElementById('chk_move_level')?.checked || false
-                },
-                train: {
-                    hmi: document.getElementById('chk_train_hmi')?.checked || false,
-                    maint: document.getElementById('chk_train_maint')?.checked || false,
-                    docs: document.getElementById('chk_train_docs')?.checked || false,
-                    remark: document.getElementById('trainRemark')?.value || ""
-                }
-            };
-
-            const workItems = [];
-            document.querySelectorAll('.work-item-row').forEach(row => {
-                workItems.push({
-                    phenomenon: row.querySelector('.phenomenon').value,
-                    causeAnalysis: row.querySelector('.cause-desc').value,
-                    result: "OK"
-                });
-            });
 
             const materialItems = [];
             document.querySelectorAll('.material-row').forEach(row => {
                 materialItems.push({
-                    partNo: row.querySelector('.mat-no').value,
+                    partNo: row.querySelector('.mat-no').value || "待補",
                     partName: row.querySelector('.mat-name').value,
                     qty: row.querySelector('.mat-qty').value
                 });
@@ -424,7 +450,10 @@
                     groupName: row.querySelector('.ratio-group').value,
                     targetRatio: row.querySelector('.ratio-target').value,
                     qtyA: row.querySelector('.ratio-a').value,
-                    qtyB: row.querySelector('.ratio-b').value
+                    qtyB: row.querySelector('.ratio-b').value,
+                    actualRatio: row.querySelector('.ratio-actual').textContent,
+                    deviation: row.querySelector('.ratio-dev').textContent,
+                    judge: row.querySelector('.ratio-judge').textContent
                 });
             });
 
@@ -438,11 +467,9 @@
                 repairNo: document.getElementById('repairNo').value,
                 machineNo: document.getElementById('machineNo').value,
                 serviceType: serviceTypes,
-                dynamicChecks: dynamicChecks,
                 serviceFee: document.getElementById('serviceFee').value,
                 equipChange: document.getElementById('equipChange').value,
                 returnItem: document.getElementById('returnItem').value,
-                workItems: workItems,
                 materialItems: materialItems,
                 ratioTests: ratioTests,
                 workHours: {
@@ -456,7 +483,7 @@
                 staffSignature: document.getElementById('staffCanvas').toDataURL()
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbxNE5U1jhKZ1smu-jx1d6KrIXfbS3q_3Zg2SHQAryE2lwJcnQcW144gumPWKQha_fkeew/exec"; // 請替換為您的 GAS 部署網址
+            const GAS_URL = "https://script.google.com/macros/s/AKfycby8Rf88_OdCf4vkZN251bvUDZOtqt9a62ZgrCkUjWfV0-BNs_57-Td4AW5BpIg6M0DLGQ/exec"; // 請替換為您的 GAS 網址
 
             try {
                 await fetch(GAS_URL, {
@@ -465,17 +492,19 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                alert('智慧服務報告書已成功送出並依分頁寫入 Google 試算表！');
+                alert('報告已成功送出！目前狀態為「待主管簽核」，資料已同步至 Google 試算表。');
+                localStorage.removeItem('serviceReportDraft'); // 結案清除草稿
                 document.getElementById('serviceForm').reset();
                 document.getElementById('date').valueAsDate = new Date();
                 clearCanvas('clientCanvas');
                 clearCanvas('staffCanvas');
+                clearCanvas('trainCanvas');
                 toggleSections();
             } catch (err) {
-                alert('寫入失敗：' + err);
+                alert('送出失敗：' + err);
             } finally {
                 btn.disabled = false;
-                btn.textContent = "確認無誤，送出報告並同步至 Google 試算表各分頁";
+                btn.textContent = "確認無誤，送出報告（狀態：待主管簽核）";
             }
         });
     </script>
