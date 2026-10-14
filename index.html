@@ -92,7 +92,7 @@
                 </div>
             </div>
 
-            <!-- 動態展開區塊 (正常/異常選項) -->
+            <!-- 動態展開區塊 -->
             <div id="installSection" class="space-y-4 p-4 bg-blue-50/50 border border-blue-200 rounded-xl hidden">
                 <h3 class="text-sm font-bold text-blue-900">⚙️ 【裝機 / 試機】功能測試與比例量測</h3>
                 <div class="space-y-3 text-xs">
@@ -266,7 +266,7 @@
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // 表單送出事件
+        // 輕量化送出：只傳送狀態標記，避免 Base64 檔案過大導致 fetch 失敗
         document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -281,9 +281,6 @@
                 docs: document.getElementById('chk_inst_docs')?.value + (document.getElementById('reason_docs')?.value ? ": " + document.getElementById('reason_docs').value : ""),
                 level: document.getElementById('chk_inst_level')?.value + (document.getElementById('reason_level')?.value ? ": " + document.getElementById('reason_level').value : "")
             };
-
-            const clientCanvas = document.getElementById('clientCanvas');
-            const staffCanvas = document.getElementById('staffCanvas');
 
             const payload = {
                 reportNo: document.getElementById('reportNo').value,
@@ -300,12 +297,12 @@
                 overallResult: "待主管簽核",
                 checklistSummary: JSON.stringify(checkResults),
                 staffName: document.getElementById('staffName').value,
-                clientSignature: clientCanvas.toDataURL(),
-                staffSignature: staffCanvas.toDataURL(),
+                clientSignature: "已簽名",
+                staffSignature: "已簽名",
                 totalHours: 0
             };
 
-            const GAS_URL = "https://script.google.com/macros/s/AKfycbyArLycZoDNAmGWfJX5nXFXbsMGdmXeBSM2u8_DaWSo3WwunVSlWAUyPF6R6e4qkZJUjQ/exec"; // 請在此填入您的正式 GAS 網址
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbzIeMcdywzRfavGD_mnL4QFeqIEBhQOSX-LGKC5ebdt3YUESM6N9JCxkrGxHkPK7RASng/exec"; // 請填入你的 GAS 網址
 
             try {
                 const response = await fetch(GAS_URL, {
